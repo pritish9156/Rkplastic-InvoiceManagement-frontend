@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API =
-"http://rkplastic-backend.onrender.com/api/bills";
+"https://rkplastic-backend.onrender.com/api/bills";
 
 export const getNextBillNo =
 () =>

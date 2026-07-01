@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const BASE_URL =
-    "http://rkplastic-backend.onrender.com/api/reports";
+    "https://rkplastic-backend.onrender.com/api/reports";
 
 const api = axios.create({
 
