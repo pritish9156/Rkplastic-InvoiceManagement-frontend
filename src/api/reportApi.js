@@ -51,26 +51,26 @@ export const getInvoicesBetweenDates = (
 
 export const downloadAllPdf = () => {
 
-    window.open(
+    const link = document.createElement("a");
 
-        `${BASE_URL}/download/all-pdf`,
+    link.href = `${BASE_URL}/download/all-pdf`;
 
-        "_blank"
+    link.target = "_blank";
 
-    );
+    link.rel = "noopener noreferrer";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
 
 };
 
 
 // Download Date Range PDF
 
-export const downloadDatePdf = (
-
-    start,
-
-    end
-
-) => {
+export const downloadDatePdf = (start, end) => {
 
     if (!start || !end) {
 
@@ -80,13 +80,20 @@ export const downloadDatePdf = (
 
     }
 
-    window.open(
+    const link = document.createElement("a");
 
-        `${BASE_URL}/download/date-pdf?start=${start}&end=${end}`,
+    link.href =
+        `${BASE_URL}/download/date-pdf?start=${start}&end=${end}`;
 
-        "_blank"
+    link.target = "_blank";
 
-    );
+    link.rel = "noopener noreferrer";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
 
 };
 
@@ -95,13 +102,19 @@ export const downloadDatePdf = (
 
 export const downloadExcel = () => {
 
-    window.open(
+    const link = document.createElement("a");
 
-        `${BASE_URL}/download/excel`,
+    link.href = `${BASE_URL}/download/excel`;
 
-        "_blank"
+    link.target = "_blank";
 
-    );
+    link.rel = "noopener noreferrer";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
 
 };
 

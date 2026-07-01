@@ -148,18 +148,21 @@ function InvoiceList() {
 
         const link = document.createElement("a");
 
-        link.href =
-            `https://rkplastic-backend.onrender.com/api/bills/${id}/pdf`;
+        link.href = `https://rkplastic-backend.onrender.com/api/bills/${id}/pdf`;
 
         link.target = "_blank";
 
-        link.rel = "noopener";
+        link.rel = "noopener noreferrer";
 
         document.body.appendChild(link);
 
         link.click();
 
-        document.body.removeChild(link);
+        setTimeout(() => {
+
+            document.body.removeChild(link);
+
+        }, 100);
 
     };
 
