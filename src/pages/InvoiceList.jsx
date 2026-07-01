@@ -144,17 +144,17 @@ function InvoiceList() {
 
         };
 
-    const downloadPdf =
+    const downloadPdf = (id) => {
 
-        (id)=>{
+        console.log("Clicked", id);
 
-            window.open(
+        window.open(
+            `https://rkplastic-backend.onrender.com/api/bills/${id}/pdf`,
+            "_blank",
+            "noopener,noreferrer"
+        );
 
-                `https://rkplastic-backend.onrender.com/api/bills/${id}/pdf`
-
-            );
-
-        };
+    };
 
     const filteredInvoices =
 
