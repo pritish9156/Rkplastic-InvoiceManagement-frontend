@@ -1,8 +1,4 @@
-import {
-    useEffect,
-    useState
-}
-from "react";
+import { useEffect, useState } from "react";
 
 import {
     useParams,
@@ -33,6 +29,8 @@ import {
 }
 from "../api/billApi";
 
+import "../styles/create-invoice.css"
+
 function EditInvoice() {
 
     const { id } =
@@ -42,43 +40,83 @@ function EditInvoice() {
         useNavigate();
 
     const [
+
+        loading,
+
+        setLoading
+
+    ] = useState(true);
+
+    const [
+
+        saving,
+
+        setSaving
+
+    ] = useState(false);
+
+    const [
+
         customer,
+
         setCustomer
+
     ] = useState(null);
 
     const [
+
         billNo,
+
         setBillNo
+
     ] = useState("");
 
     const [
+
         billDate,
+
         setBillDate
+
     ] = useState("");
 
     const [
+
         challanNoField,
+
         setChallanNoField
+
     ] = useState("");
 
     const [
+
         custChallanNoField,
+
         setCustChallanNoField
+
     ] = useState("");
 
     const [
+
         orderCode,
+
         setOrderCode
+
     ] = useState("");
 
     const [
+
         vendorCode,
+
         setVendorCode
+
     ] = useState("");
 
     const [
+
         items,
+
         setItems
+
     ] = useState([]);
 
     useEffect(() => {
@@ -88,54 +126,84 @@ function EditInvoice() {
     }, []);
 
     const loadInvoice =
-        async () => {
 
-            try {
+        async()=>{
 
-                const response =
+            try{
+
+                setLoading(true);
+
+                const response=
+
                     await getInvoice(id);
 
-                const bill =
+                const bill=
+
                     response.data;
 
                 setBillNo(
+
                     bill.billNo
+
                 );
 
                 setBillDate(
+
                     bill.billDate
+
                 );
 
                 setCustomer(
+
                     bill.customer
+
                 );
 
                 setItems(
+
                     bill.items || []
+
                 );
 
                 setChallanNoField(
+
                     bill.challanNoField || ""
+
                 );
 
                 setCustChallanNoField(
+
                     bill.custChallanNoField || ""
+
                 );
 
                 setOrderCode(
+
                     bill.orderCode || ""
+
                 );
 
                 setVendorCode(
+
                     bill.vendorCode || ""
+
                 );
 
             }
-            catch {
+
+            catch{
 
                 toast.error(
-                    "Failed To Load Invoice"
+
+                    "Unable to load invoice."
+
                 );
+
+            }
+
+            finally{
+
+                setLoading(false);
 
             }
 
@@ -145,18 +213,15 @@ function EditInvoice() {
 
         items.reduce(
 
-            (
-                sum,
-                item
-            ) =>
+            (sum,item)=>
 
-                sum +
+                sum+
 
-                (
-                    Number(item.qty || 0)
-                    *
-                    Number(item.rate || 0)
-                ),
+                Number(item.qty||0)
+
+                *
+
+                Number(item.rate||0),
 
             0
 
@@ -168,55 +233,87 @@ function EditInvoice() {
 
             ?
 
-            customer.gstin
-                .substring(0, 2)
-
-            !==
-
-            "27"
+            customer.gstin.substring(0,2)!=="27"
 
             :
 
             false;
 
     const cgst =
+
         interstate
-            ? 0
-            : subtotal * 0.09;
+
+            ?
+
+            0
+
+            :
+
+            subtotal*0.09;
 
     const sgst =
+
         interstate
-            ? 0
-            : subtotal * 0.09;
+
+            ?
+
+            0
+
+            :
+
+            subtotal*0.09;
 
     const igst =
+
         interstate
-            ? subtotal * 0.18
-            : 0;
+
+            ?
+
+            subtotal*0.18
+
+            :
+
+            0;
 
     const grandTotal =
 
-        subtotal +
+        subtotal+
 
-        cgst +
+        cgst+
 
-        sgst +
+        sgst+
 
         igst;
 
     const saveChanges =
-        async () => {
 
-            try {
+        async()=>{
 
-                const payload = {
+            if(!customer){
+
+                toast.error(
+
+                    "Please select customer."
+
+                );
+
+                return;
+
+            }
+
+            try{
+
+                setSaving(true);
+
+                const payload={
 
                     billNo,
 
                     billDate,
 
                     customerId:
-                        customer.id,
+
+                    customer.id,
 
                     challanNoField,
 
@@ -226,15 +323,23 @@ function EditInvoice() {
 
                     vendorCode,
 
-                    items: items.map(item => ({
+                    items:items.map(item=>({
 
-                        description: item.description,
+                        description:
 
-                        hsnSac: item.hsnSac,
+                        item.description,
 
-                        qty: item.qty,
+                        hsnSac:
 
-                        rate: item.rate
+                        item.hsnSac,
+
+                        qty:
+
+                        item.qty,
+
+                        rate:
+
+                        item.rate
 
                     }))
 
@@ -243,151 +348,302 @@ function EditInvoice() {
                 await updateInvoice(
 
                     id,
+
                     payload
 
                 );
 
                 toast.success(
-                    "Invoice Updated"
+
+                    "Invoice Updated Successfully"
+
                 );
 
                 navigate(
+
                     "/invoices"
+
                 );
 
             }
-            catch {
+
+            catch{
 
                 toast.error(
-                    "Update Failed"
+
+                    "Update failed."
+
                 );
+
+            }
+
+            finally{
+
+                setSaving(false);
 
             }
 
         };
 
-    return (
+        return (
 
-        <MainLayout>
+    <MainLayout>
 
-            <div className="row">
+        <div className="row g-4">
 
-                <div className="col-lg-8">
+            {/* ===========================
+                    LEFT SECTION
+            ============================ */}
 
-                    <div className="premium-card">
+            <div className="col-xl-8">
 
-                        <h3>
+                <div className="premium-card">
 
-                            Edit Invoice
+                    <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center mb-4">
 
-                        </h3>
+                        <div>
 
-                        <hr />
+                            <h2 className="page-title mb-1">
 
-                        <div className="row">
+                                Edit Invoice
 
-                            <div className="col-md-6">
+                            </h2>
 
-                                <label>
+                            <p className="text-muted mb-0">
 
-                                    Bill No
+                                Update existing GST Invoice
 
-                                </label>
-
-                                <input
-
-                                    className="form-control"
-
-                                    value={billNo}
-
-                                    onChange={(e)=>
-
-                                        setBillNo(
-                                            e.target.value
-                                        )
-
-                                    }
-
-                                />
-
-                            </div>
-
-                            <div className="col-md-6">
-
-                                <label>
-
-                                    Bill Date
-
-                                </label>
-
-                                <input
-
-                                    type="date"
-
-                                    className="form-control"
-
-                                    value={billDate}
-
-                                    onChange={(e)=>
-
-                                        setBillDate(
-                                            e.target.value
-                                        )
-
-                                    }
-
-                                />
-
-                            </div>
+                            </p>
 
                         </div>
 
-                        <br />
+                        <span className="badge bg-warning fs-6 mt-3 mt-lg-0">
 
-                        <CustomerSearch
+                            Invoice #{billNo}
 
-                            onCustomerSelect={
-                                setCustomer
-                            }
+                        </span>
 
-                        />
+                    </div>
 
-                        <br />
+                    {/* Invoice Information */}
+
+                    <div className="premium-section">
+
+                        <h5 className="section-title">
+
+                            Invoice Information
+
+                        </h5>
 
                         {
 
-                            customer &&
+                            loading ?
 
-                            <div className="card p-3">
+                            <div className="placeholder-glow">
 
-                                <h5>
+                                <span className="placeholder col-12 rounded"></span>
 
-                                    {customer.name}
+                            </div>
 
-                                </h5>
+                            :
 
-                                <p>
+                            <div className="row">
 
-                                    {customer.address}
+                                <div className="col-md-6 mb-3">
 
-                                </p>
+                                    <label>
 
-                                <p>
+                                        Bill Number
 
-                                    GSTIN :
-                                    {customer.gstin}
+                                    </label>
 
-                                </p>
+                                    <input
+
+                                        className="form-control premium-input"
+
+                                        value={billNo}
+
+                                        onChange={(e)=>
+
+                                            setBillNo(
+
+                                                e.target.value
+
+                                            )
+
+                                        }
+
+                                    />
+
+                                </div>
+
+                                <div className="col-md-6 mb-3">
+
+                                    <label>
+
+                                        Bill Date
+
+                                    </label>
+
+                                    <input
+
+                                        type="date"
+
+                                        className="form-control premium-input"
+
+                                        value={billDate}
+
+                                        onChange={(e)=>
+
+                                            setBillDate(
+
+                                                e.target.value
+
+                                            )
+
+                                        }
+
+                                    />
+
+                                </div>
 
                             </div>
 
                         }
 
-                        <br />
+                    </div>
+
+                    {/* Customer */}
+
+                    <div className="premium-section mt-4">
+
+                        <h5 className="section-title">
+
+                            Customer
+
+                        </h5>
+
+                        <CustomerSearch
+
+                            onCustomerSelect={
+
+                                setCustomer
+
+                            }
+
+                        />
+
+                        {
+
+                            customer &&
+
+                            <div className="customer-preview mt-4">
+
+                                <div className="customer-header">
+
+                                    <div>
+
+                                        <h5>
+
+                                            {customer.name}
+
+                                        </h5>
+
+                                        <small>
+
+                                            GST Registered Customer
+
+                                        </small>
+
+                                    </div>
+
+                                    <span className="badge bg-success">
+
+                                        Active
+
+                                    </span>
+
+                                </div>
+
+                                <hr/>
+
+                                <div className="row">
+
+                                    <div className="col-md-6">
+
+                                        <strong>
+
+                                            Address
+
+                                        </strong>
+
+                                        <p>
+
+                                            {customer.address}
+
+                                        </p>
+
+                                    </div>
+
+                                    <div className="col-md-3">
+
+                                        <strong>
+
+                                            GSTIN
+
+                                        </strong>
+
+                                        <p>
+
+                                            {customer.gstin}
+
+                                        </p>
+
+                                    </div>
+
+                                    <div className="col-md-3">
+
+                                        <strong>
+
+                                            Phone
+
+                                        </strong>
+
+                                        <p>
+
+                                            {
+
+                                                customer.phone ||
+
+                                                "-"
+
+                                            }
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        }
+
+                    </div>
+
+                    {/* Additional Information */}
+
+                    <div className="premium-section mt-4">
+
+                        <h5 className="section-title">
+
+                            Additional Details
+
+                        </h5>
 
                         <div className="row">
 
-                            <div className="col-md-6">
+                            <div className="col-md-6 mb-3">
 
                                 <label>
 
@@ -397,14 +653,16 @@ function EditInvoice() {
 
                                 <input
 
-                                    className="form-control"
+                                    className="form-control premium-input"
 
                                     value={challanNoField}
 
                                     onChange={(e)=>
 
                                         setChallanNoField(
+
                                             e.target.value
+
                                         )
 
                                     }
@@ -413,7 +671,7 @@ function EditInvoice() {
 
                             </div>
 
-                            <div className="col-md-6">
+                            <div className="col-md-6 mb-3">
 
                                 <label>
 
@@ -423,14 +681,16 @@ function EditInvoice() {
 
                                 <input
 
-                                    className="form-control"
+                                    className="form-control premium-input"
 
                                     value={custChallanNoField}
 
                                     onChange={(e)=>
 
                                         setCustChallanNoField(
+
                                             e.target.value
+
                                         )
 
                                     }
@@ -439,13 +699,7 @@ function EditInvoice() {
 
                             </div>
 
-                        </div>
-
-                        <br />
-
-                        <div className="row">
-
-                            <div className="col-md-6">
+                            <div className="col-md-6 mb-3">
 
                                 <label>
 
@@ -455,14 +709,16 @@ function EditInvoice() {
 
                                 <input
 
-                                    className="form-control"
+                                    className="form-control premium-input"
 
                                     value={orderCode}
 
                                     onChange={(e)=>
 
                                         setOrderCode(
+
                                             e.target.value
+
                                         )
 
                                     }
@@ -471,7 +727,7 @@ function EditInvoice() {
 
                             </div>
 
-                            <div className="col-md-6">
+                            <div className="col-md-6 mb-3">
 
                                 <label>
 
@@ -481,14 +737,16 @@ function EditInvoice() {
 
                                 <input
 
-                                    className="form-control"
+                                    className="form-control premium-input"
 
                                     value={vendorCode}
 
                                     onChange={(e)=>
 
                                         setVendorCode(
+
                                             e.target.value
+
                                         )
 
                                     }
@@ -499,7 +757,9 @@ function EditInvoice() {
 
                         </div>
 
-                        <br />
+                    </div>
+
+                    <div className="mt-4">
 
                         <ItemTable
 
@@ -511,43 +771,205 @@ function EditInvoice() {
 
                     </div>
 
-                </div>
+                                    </div>
 
-                <div className="col-lg-4">
+            </div>
+
+            {/* ===========================
+                    RIGHT SIDE
+            ============================ */}
+
+            <div className="col-xl-4">
+
+                <div className="sticky-summary">
 
                     <InvoiceSummary
 
                         subtotal={subtotal}
+
                         cgst={cgst}
+
                         sgst={sgst}
+
                         igst={igst}
+
                         grandTotal={grandTotal}
 
                     />
 
-                    <br />
+                    {/* Invoice Status */}
 
-                    <button
+                    <div className="premium-card mt-4">
 
-                        className="btn btn-success w-100"
+                        <h5 className="mb-3">
 
-                        onClick={
-                            saveChanges
-                        }
+                            Invoice Status
 
-                    >
+                        </h5>
 
-                        Update Invoice
+                        <div className="status-row">
 
-                    </button>
+                            <span>
+
+                                Customer
+
+                            </span>
+
+                            <strong>
+
+                                {
+
+                                    customer
+
+                                    ?
+
+                                    customer.name
+
+                                    :
+
+                                    "Not Selected"
+
+                                }
+
+                            </strong>
+
+                        </div>
+
+                        <div className="status-row">
+
+                            <span>
+
+                                Items
+
+                            </span>
+
+                            <strong>
+
+                                {items.length}
+
+                            </strong>
+
+                        </div>
+
+                        <div className="status-row">
+
+                            <span>
+
+                                Tax Type
+
+                            </span>
+
+                            <strong>
+
+                                {
+
+                                    interstate
+
+                                    ?
+
+                                    "IGST"
+
+                                    :
+
+                                    "CGST + SGST"
+
+                                }
+
+                            </strong>
+
+                        </div>
+
+                        <div className="status-row">
+
+                            <span>
+
+                                Grand Total
+
+                            </span>
+
+                            <strong className="text-success">
+
+                                ₹ {grandTotal.toFixed(2)}
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    {/* Update Button */}
+
+                    <div className="premium-card mt-4">
+
+                        <button
+
+                            className="btn btn-premium btn-lg w-100"
+
+                            disabled={saving}
+
+                            onClick={saveChanges}
+
+                        >
+
+                            {
+
+                                saving ?
+
+                                <>
+
+                                    <span className="spinner-border spinner-border-sm me-2"></span>
+
+                                    Updating Invoice...
+
+                                </>
+
+                                :
+
+                                <>
+
+                                    💾 Update Invoice
+
+                                </>
+
+                            }
+
+                        </button>
+
+                        <button
+
+                            className="btn btn-outline-secondary w-100 mt-3"
+
+                            disabled={saving}
+
+                            onClick={()=>
+
+                                navigate("/invoices")
+
+                            }
+
+                        >
+
+                            ← Back to Invoices
+
+                        </button>
+
+                        <small className="text-muted d-block text-center mt-3">
+
+                            Changes will update the invoice and regenerate the latest PDF.
+
+                        </small>
+
+                    </div>
 
                 </div>
 
             </div>
 
-        </MainLayout>
+        </div>
 
-    );
+    </MainLayout>
+
+);
 
 }
 

@@ -1,154 +1,163 @@
-import {
-    Link,
-    useLocation
-}
-    from "react-router-dom";
-
+import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
 import logo from "../assets/logo.ico";
-
+import "../styles/global.css";
 
 function Navbar() {
 
-    const location =
-        useLocation();
+    const location = useLocation();
+
+    const [expanded, setExpanded] = useState(false);
+
+    const closeMenu = () => setExpanded(false);
 
     return (
 
-        <nav className="premium-navbar">
+        <nav className="navbar navbar-expand-lg premium-navbar sticky-top">
 
             <div className="container-fluid">
 
-                <Link to="/" style={{textDecoration: "none"}}>
-
-                <div className="logo-section">
+                <Link
+                    to="/"
+                    className="navbar-brand d-flex align-items-center text-decoration-none"
+                    onClick={closeMenu}
+                >
 
                     <img
                         src={logo}
                         alt="RK Plastics Logo"
-                        width="50"
-                        height="50"
+                        className="navbar-logo"
                     />
 
-                    <div>
+                    <div className="ms-3">
 
-                        <h4 className="mb-0">
-                            RK Plastics And Enterprises
-                        </h4>
+                        <h5 className="brand-title mb-0">
 
-                        <small>
-                            Invoice Management
+                            RK Plastics & Enterprises
+
+                        </h5>
+
+                        <small className="brand-subtitle">
+
+                            Invoice Management System
+
                         </small>
 
                     </div>
 
-                </div>
-
                 </Link>
 
-                <div className="nav-links">
+                <button
+                    className="navbar-toggler"
+                    type="button"
+                    onClick={() => setExpanded(!expanded)}
+                >
 
-                    <Link
+                    <span className="navbar-toggler-icon"></span>
 
-                        className={
+                </button>
 
-                            location.pathname === "/"
+                <div
+                    className={
+                        expanded
+                            ? "collapse navbar-collapse show"
+                            : "collapse navbar-collapse"
+                    }
+                >
 
-                                ?
+                    <ul className="navbar-nav ms-auto align-items-lg-center">
 
-                                "nav-link active"
+                        <li className="navbar-item">
 
-                                :
+                            <Link
+                                to="/"
+                                onClick={closeMenu}
+                                className={
+                                    location.pathname === "/"
+                                        ? "navbar-link active-nav"
+                                        : "navbar-link"
+                                }
+                            >
 
-                                "nav-link"
+                                Dashboard
 
-                        }
+                            </Link>
 
-                        to="/"
+                        </li>
 
-                    >
+                        <li className="navbar-item">
 
-                        Dashboard
+                            <Link
+                                to="/invoice/create"
+                                onClick={closeMenu}
+                                className={
+                                    location.pathname === "/invoice/create"
+                                        ? "navbar-link active-nav"
+                                        : "navbar-link"
+                                }
+                            >
 
-                    </Link>
+                                Create Invoice
 
-                    <Link
+                            </Link>
 
-                        className={
+                        </li>
 
-                            location.pathname === "/invoice/create"
+                        <li className="navbar-item">
 
-                                ?
+                            <Link
+                                to="/invoices"
+                                onClick={closeMenu}
+                                className={
+                                    location.pathname === "/invoices"
+                                        ? "navbar-link active-nav"
+                                        : "navbar-link"
+                                }
+                            >
 
-                                "nav-link active"
+                                Invoices
 
-                                :
+                            </Link>
 
-                                "nav-link"
+                        </li>
 
-                        }
+                        <li className="navbar-item">
 
-                        to="/invoice/create"
+                            <Link
+                                to="/customers"
+                                onClick={closeMenu}
+                                className={
+                                    location.pathname === "/customers"
+                                        ? "navbar-link active-nav"
+                                        : "navbar-link"
+                                }
+                            >
 
-                    >
+                                Customers
 
-                        Create Invoice
+                            </Link>
 
-                    </Link>
+                        </li>
 
-                    <Link
+                        <li className="navbar-item">
 
-                        className={
+                            <Link
+                                to="/reports"
+                                onClick={closeMenu}
+                                className={
+                                    location.pathname === "/reports"
+                                        ? "navbar-link active-nav"
+                                        : "navbar-link"
+                                }
+                            >
 
-                            location.pathname === "/invoices"
+                                Reports
 
-                                ?
+                            </Link>
 
-                                "nav-link active"
+                        </li>
 
-                                :
-
-                                "nav-link"
-
-                        }
-
-                        to="/invoices"
-
-                    >
-
-                        Invoices
-
-                    </Link>
-
-                    <Link
-
-                        className={
-
-                            location.pathname === "/customers"
-
-                                ?
-
-                                "nav-link active"
-
-                                :
-
-                                "nav-link"
-
-                        }
-
-                        to="/customers"
-
-                    >
-
-                        Customers
-
-                    </Link>
-
-                    <Link
-                        className="nav-link"
-                        to="/reports"
-                    >
-                        Reports
-                    </Link>
+                    </ul>
 
                 </div>
 

@@ -1,3 +1,5 @@
+import "../styles/global.css";
+
 function InvoiceSummary({
 
     subtotal,
@@ -8,75 +10,106 @@ function InvoiceSummary({
 
 }) {
 
+    const summary = [
+
+        {
+            label: "Subtotal",
+            value: subtotal,
+            className: ""
+        },
+
+        {
+            label: "CGST (9%)",
+            value: cgst,
+            className: "text-success"
+        },
+
+        {
+            label: "SGST (9%)",
+            value: sgst,
+            className: "text-success"
+        },
+
+        {
+            label: "IGST (18%)",
+            value: igst,
+            className: "text-warning"
+        }
+
+    ];
+
     return (
 
-        <div className="premium-card invoice-summary">
+        <div className="premium-card invoice-summary-card">
 
-            <h4 className="mb-4">
+            <div className="summary-header">
 
-                Invoice Summary
+                <h4>
 
-            </h4>
+                    Invoice Summary
 
-            <div className="summary-row">
+                </h4>
 
-                <span>
-                    Subtotal
-                </span>
+                <small>
 
-                <strong>
-                    ₹ {subtotal.toFixed(2)}
-                </strong>
+                    Tax Calculation
+
+                </small>
 
             </div>
 
-            <div className="summary-row">
+            {
 
-                <span>
-                    CGST (9%)
-                </span>
+                summary.map((item, index) => (
 
-                <strong>
-                    ₹ {cgst.toFixed(2)}
-                </strong>
+                    <div
+                        className="summary-row"
+                        key={index}
+                    >
 
-            </div>
+                        <span>
 
-            <div className="summary-row">
+                            {item.label}
 
-                <span>
-                    SGST (9%)
-                </span>
+                        </span>
 
-                <strong>
-                    ₹ {sgst.toFixed(2)}
-                </strong>
+                        <strong className={item.className}>
 
-            </div>
+                            ₹ {item.value.toFixed(2)}
 
-            <div className="summary-row">
+                        </strong>
 
-                <span>
-                    IGST (18%)
-                </span>
+                    </div>
 
-                <strong>
-                    ₹ {igst.toFixed(2)}
-                </strong>
+                ))
 
-            </div>
+            }
 
-            <hr />
+            <hr className="summary-divider" />
 
             <div className="summary-total">
 
-                <span>
-                    Grand Total
-                </span>
+                <div>
 
-                <strong>
-                    ₹ {grandTotal.toFixed(2)}
-                </strong>
+                    <small>
+
+                        Total Payable
+
+                    </small>
+
+                    <h4>
+
+                        ₹ {grandTotal.toFixed(2)}
+
+                    </h4>
+
+                </div>
+
+                <div className="total-badge">
+
+                    GST
+
+                </div>
 
             </div>
 

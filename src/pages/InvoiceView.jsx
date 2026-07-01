@@ -1,11 +1,16 @@
 import {
+
     useEffect,
     useState
+
 }
 from "react";
 
 import {
+
+    useNavigate,
     useParams
+
 }
 from "react-router-dom";
 
@@ -16,19 +21,37 @@ import MainLayout
 from "../layouts/MainLayout";
 
 import {
+
     getInvoice
+
 }
 from "../api/billApi";
+
+import "../styles/invoice.css"
 
 function InvoiceView() {
 
     const { id } =
         useParams();
 
+    const navigate =
+        useNavigate();
+
     const [
+
         invoice,
+
         setInvoice
+
     ] = useState(null);
+
+    const [
+
+        loading,
+
+        setLoading
+
+    ] = useState(true);
 
     useEffect(() => {
 
@@ -37,48 +60,135 @@ function InvoiceView() {
     }, []);
 
     const loadInvoice =
-        async () => {
+        async()=>{
 
-            try {
+            try{
 
-                const response =
+                setLoading(true);
+
+                const response=
+
                     await getInvoice(id);
 
                 setInvoice(
+
                     response.data
+
                 );
 
             }
-            catch {
+
+            catch{
 
                 toast.error(
-                    "Failed To Load Invoice"
+
+                    "Unable to load invoice."
+
                 );
+
+            }
+
+            finally{
+
+                setLoading(false);
 
             }
 
         };
 
-    const downloadPdf =
-        () => {
+    const downloadPdf = ()=>{
 
-            window.open(
+        if(!invoice)
 
-                `https://rkplastic-backend.onrender.com/api/bills/${invoice.id}/pdf`
+            return;
 
-            );
+        window.open(
 
-        };
+            `https://rkplastic-backend.onrender.com/api/bills/${invoice.id}/pdf`
 
-    if (!invoice) {
+        );
 
-        return (
+    };
+
+    const formatCurrency=(value)=>{
+
+        return `₹ ${Number(
+
+            value || 0
+
+        ).toLocaleString(
+
+            "en-IN",
+
+            {
+
+                minimumFractionDigits:2,
+
+                maximumFractionDigits:2
+
+            }
+
+        )}`;
+
+    };
+
+    if(loading){
+
+        return(
 
             <MainLayout>
 
                 <div className="premium-card">
 
-                    Loading...
+                    <div className="placeholder-glow">
+
+                        <span className="placeholder col-12 mb-3"></span>
+
+                        <span className="placeholder col-10 mb-3"></span>
+
+                        <span className="placeholder col-8 mb-3"></span>
+
+                        <span className="placeholder col-6"></span>
+
+                    </div>
+
+                </div>
+
+            </MainLayout>
+
+        );
+
+    }
+
+    if(!invoice){
+
+        return(
+
+            <MainLayout>
+
+                <div className="premium-card text-center">
+
+                    <h3>
+
+                        Invoice Not Found
+
+                    </h3>
+
+                    <button
+
+                        className="btn btn-premium mt-3"
+
+                        onClick={()=>
+
+                            navigate("/invoices")
+
+                        }
+
+                    >
+
+                        Back to Invoices
+
+                    </button>
 
                 </div>
 
@@ -90,335 +200,431 @@ function InvoiceView() {
 
     return (
 
-        <MainLayout>
+    <MainLayout>
 
-            <div className="d-flex justify-content-between align-items-center mb-4">
+        {/* ===========================
+                PAGE HEADER
+        ============================ */}
 
-                <h2>
+        <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center mb-4">
+
+            <div>
+
+                <h2 className="page-title mb-1">
 
                     Invoice Details
 
                 </h2>
 
+                <p className="text-muted mb-0">
+
+                    View complete invoice information.
+
+                </p>
+
+            </div>
+
+            <div className="d-flex gap-2 mt-3 mt-lg-0">
+
                 <button
 
-                    className="btn btn-danger"
+                    className="btn btn-premium"
 
-                    onClick={
-                        downloadPdf
+                    onClick={downloadPdf}
+
+                >
+
+                    📄 Download PDF
+
+                </button>
+
+                <button
+
+                    className="btn btn-outline-secondary"
+
+                    onClick={()=>
+
+                        navigate("/invoices")
+
                     }
 
                 >
 
-                    Download PDF
+                    ← Back
 
                 </button>
 
             </div>
 
-            <div className="row">
+        </div>
 
-                <div className="col-lg-6">
+        <div className="row g-4">
 
-                    <div className="premium-card">
+            {/* LEFT */}
 
-                        <h4>
+            <div className="col-xl-8">
 
-                            Customer Details
+                {/* Customer */}
 
-                        </h4>
+                <div className="premium-card">
 
-                        <hr />
+                    <div className="customer-header">
 
-                        <p>
+                        <div>
 
-                            <strong>
+                            <h4>
 
-                                Name :
+                                {invoice.customer?.name}
 
-                            </strong>
+                            </h4>
 
-                            {" "}
+                            <small>
 
-                            {invoice.customer?.name}
+                                GST Registered Customer
 
-                        </p>
+                            </small>
 
-                        <p>
+                        </div>
 
-                            <strong>
+                        <span className="badge bg-success">
 
-                                GSTIN :
+                            Active
 
-                            </strong>
+                        </span>
 
-                            {" "}
+                    </div>
 
-                            {invoice.customer?.gstin}
+                    <hr/>
 
-                        </p>
+                    <div className="row">
 
-                        <p>
-
-                            <strong>
-
-                                Phone :
-
-                            </strong>
-
-                            {" "}
-
-                            {invoice.customer?.phone}
-
-                        </p>
-
-                        <p>
+                        <div className="col-md-6">
 
                             <strong>
 
-                                Address :
+                                Address
 
                             </strong>
 
-                            {" "}
+                            <p>
 
-                            {invoice.customer?.address}
+                                {invoice.customer?.address}
 
-                        </p>
+                            </p>
+
+                        </div>
+
+                        <div className="col-md-3">
+
+                            <strong>
+
+                                GSTIN
+
+                            </strong>
+
+                            <p>
+
+                                {invoice.customer?.gstin}
+
+                            </p>
+
+                        </div>
+
+                        <div className="col-md-3">
+
+                            <strong>
+
+                                Phone
+
+                            </strong>
+
+                            <p>
+
+                                {
+
+                                    invoice.customer?.phone ||
+
+                                    "-"
+
+                                }
+
+                            </p>
+
+                        </div>
 
                     </div>
 
                 </div>
 
-                <div className="col-lg-6">
+                {/* Invoice Information */}
 
-                    <div className="premium-card">
+                <div className="premium-card mt-4">
 
-                        <h4>
+                    <h4>
 
-                            Invoice Information
+                        Invoice Information
 
-                        </h4>
+                    </h4>
 
-                        <hr />
+                    <hr/>
 
-                        <p>
+                    <div className="row">
 
-                            <strong>
-
-                                Bill No :
-
-                            </strong>
-
-                            {" "}
-
-                            {invoice.billNo}
-
-                        </p>
-
-                        <p>
+                        <div className="col-md-6 mb-3">
 
                             <strong>
 
-                                Bill Date :
+                                Bill Number
 
                             </strong>
 
-                            {" "}
+                            <p>
 
-                            {invoice.billDate}
+                                #{invoice.billNo}
 
-                        </p>
+                            </p>
 
-                        <p>
+                        </div>
+
+                        <div className="col-md-6 mb-3">
 
                             <strong>
 
-                                Challan No :
+                                Bill Date
 
                             </strong>
 
-                            {" "}
+                            <p>
 
-                            {invoice.challanNoField}
+                                {invoice.billDate}
 
-                        </p>
+                            </p>
 
-                        <p>
+                        </div>
+
+                        <div className="col-md-6 mb-3">
 
                             <strong>
 
-                                Customer Challan :
+                                Challan No
 
                             </strong>
 
-                            {" "}
+                            <p>
 
-                            {invoice.custChallanNoField}
+                                {
 
-                        </p>
+                                    invoice.challanNoField ||
 
-                        <p>
+                                    "-"
+
+                                }
+
+                            </p>
+
+                        </div>
+
+                        <div className="col-md-6 mb-3">
 
                             <strong>
 
-                                Order Code :
+                                Customer Challan
 
                             </strong>
 
-                            {" "}
+                            <p>
 
-                            {invoice.orderCode}
+                                {
 
-                        </p>
+                                    invoice.custChallanNoField ||
 
-                        <p>
+                                    "-"
+
+                                }
+
+                            </p>
+
+                        </div>
+
+                        <div className="col-md-6">
 
                             <strong>
 
-                                Vendor Code :
+                                Order Code
 
                             </strong>
 
-                            {" "}
+                            <p>
 
-                            {invoice.vendorCode}
+                                {
 
-                        </p>
+                                    invoice.orderCode ||
+
+                                    "-"
+
+                                }
+
+                            </p>
+
+                        </div>
+
+                        <div className="col-md-6">
+
+                            <strong>
+
+                                Vendor Code
+
+                            </strong>
+
+                            <p>
+
+                                {
+
+                                    invoice.vendorCode ||
+
+                                    "-"
+
+                                }
+
+                            </p>
+
+                        </div>
 
                     </div>
 
                 </div>
 
-            </div>
+                {/* Items */}
 
-            <div className="premium-card mt-4">
+                <div className="premium-card mt-4">
 
-                <h4>
+                    <h4>
 
-                    Invoice Items
+                        Invoice Items
 
-                </h4>
+                    </h4>
 
-                <table className="table">
+                    <div className="table-responsive mt-3">
 
-                    <thead>
+                        <table className="table premium-item-table">
 
-                        <tr>
+                            <thead>
 
-                            <th>
+                            <tr>
 
-                                Description
+                                <th>
 
-                            </th>
+                                    Description
 
-                            <th>
+                                </th>
 
-                                HSN/SAC
+                                <th>
 
-                            </th>
+                                    HSN/SAC
 
-                            <th>
+                                </th>
 
-                                Qty
+                                <th>
 
-                            </th>
+                                    Qty
 
-                            <th>
+                                </th>
 
-                                Rate
+                                <th>
 
-                            </th>
+                                    Rate
 
-                            <th>
+                                </th>
 
-                                Amount
+                                <th>
 
-                            </th>
+                                    Amount
 
-                        </tr>
+                                </th>
 
-                    </thead>
+                            </tr>
 
-                    <tbody>
+                            </thead>
 
-                        {
+                            <tbody>
 
-                            invoice.items?.map(
+                            {
 
-                                item =>
+                                invoice.items?.map(item=>
 
-                                    <tr
-                                        key={
-                                            item.id
-                                        }
-                                    >
+                                    <tr key={item.id}>
 
                                         <td>
 
-                                            {
-                                                item.description
-                                            }
+                                            {item.description}
 
                                         </td>
 
                                         <td>
 
-                                            {
-                                                item.hsnSac
-                                            }
+                                            {item.hsnSac}
 
                                         </td>
 
                                         <td>
 
-                                            {
-                                                item.qty
-                                            }
+                                            {item.qty}
 
                                         </td>
 
                                         <td>
 
-                                            {
-                                                item.rate
-                                            }
+                                            {formatCurrency(item.rate)}
 
                                         </td>
 
                                         <td>
 
-                                            {
-                                                item.amount
-                                            }
+                                            <strong>
+
+                                                {
+
+                                                    formatCurrency(
+
+                                                        item.amount
+
+                                                    )
+
+                                                }
+
+                                            </strong>
 
                                         </td>
 
                                     </tr>
 
-                            )
+                                )
 
-                        }
+                            }
 
-                    </tbody>
+                            </tbody>
 
-                </table>
+                        </table>
+
+                    </div>
+
+                </div>
 
             </div>
 
-            <div className="row mt-4">
+            {/* RIGHT */}
 
-                <div className="col-lg-4 ms-auto">
+            <div className="col-xl-4">
 
-                    <div className="premium-card">
+                <div className="sticky-summary">
 
-                        <h4>
+                                        <div className="premium-card">
+
+                        <h4 className="mb-4">
 
                             Invoice Summary
 
                         </h4>
-
-                        <hr />
 
                         <div className="summary-row">
 
@@ -430,7 +636,15 @@ function InvoiceView() {
 
                             <strong>
 
-                                ₹ {invoice.subtotal}
+                                {
+
+                                    formatCurrency(
+
+                                        invoice.subtotal
+
+                                    )
+
+                                }
 
                             </strong>
 
@@ -440,13 +654,21 @@ function InvoiceView() {
 
                             <span>
 
-                                CGST
+                                CGST (9%)
 
                             </span>
 
                             <strong>
 
-                                ₹ {invoice.cgst}
+                                {
+
+                                    formatCurrency(
+
+                                        invoice.cgst
+
+                                    )
+
+                                }
 
                             </strong>
 
@@ -456,13 +678,21 @@ function InvoiceView() {
 
                             <span>
 
-                                SGST
+                                SGST (9%)
 
                             </span>
 
                             <strong>
 
-                                ₹ {invoice.sgst}
+                                {
+
+                                    formatCurrency(
+
+                                        invoice.sgst
+
+                                    )
+
+                                }
 
                             </strong>
 
@@ -472,19 +702,27 @@ function InvoiceView() {
 
                             <span>
 
-                                IGST
+                                IGST (18%)
 
                             </span>
 
                             <strong>
 
-                                ₹ {invoice.igst}
+                                {
+
+                                    formatCurrency(
+
+                                        invoice.igst
+
+                                    )
+
+                                }
 
                             </strong>
 
                         </div>
 
-                        <hr />
+                        <hr/>
 
                         <div className="summary-total">
 
@@ -496,9 +734,113 @@ function InvoiceView() {
 
                             <strong>
 
-                                ₹ {invoice.grandTotal}
+                                {
+
+                                    formatCurrency(
+
+                                        invoice.grandTotal
+
+                                    )
+
+                                }
 
                             </strong>
+
+                        </div>
+
+                    </div>
+
+                    {/* Amount In Words */}
+
+                    <div className="premium-card mt-4">
+
+                        <h5>
+
+                            Amount In Words
+
+                        </h5>
+
+                        <p className="mb-0 text-muted">
+
+                            {
+
+                                invoice.amountInWords ||
+
+                                "-"
+
+                            }
+
+                        </p>
+
+                    </div>
+
+                    {/* GST Details */}
+
+                    <div className="premium-card mt-4">
+
+                        <h5 className="mb-3">
+
+                            GST Information
+
+                        </h5>
+
+                        <div className="status-row">
+
+                            <span>
+
+                                Tax Type
+
+                            </span>
+
+                            <strong>
+
+                                {
+
+                                    invoice.igstApplied
+
+                                    ?
+
+                                    "IGST"
+
+                                    :
+
+                                    "CGST + SGST"
+
+                                }
+
+                            </strong>
+
+                        </div>
+
+                        <div className="status-row">
+
+                            <span>
+
+                                Invoice Status
+
+                            </span>
+
+                            <span className="badge bg-success">
+
+                                Generated
+
+                            </span>
+
+                        </div>
+
+                        <div className="status-row">
+
+                            <span>
+
+                                PDF
+
+                            </span>
+
+                            <span className="badge bg-primary">
+
+                                Available
+
+                            </span>
 
                         </div>
 
@@ -508,9 +850,11 @@ function InvoiceView() {
 
             </div>
 
-        </MainLayout>
+        </div>
 
-    );
+    </MainLayout>
+
+);
 
 }
 

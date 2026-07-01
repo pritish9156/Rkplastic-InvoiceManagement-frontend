@@ -1,0 +1,81 @@
+/* Dashboard */
+
+.dashboard-stat-card{
+
+    padding:28px;
+
+    border-radius:18px;
+
+    color:white;
+
+    box-shadow:0 20px 45px rgba(0,0,0,.08);
+
+    transition:.3s;
+
+}
+
+.dashboard-stat-card:hover{
+
+    transform:translateY(-5px);
+
+}
+
+.dashboard-stat-card h2{
+
+    margin-top:10px;
+
+    font-weight:700;
+
+}
+
+.dashboard-stat-card.blue{
+
+    background:linear-gradient(135deg,#2563eb,#4f46e5);
+
+}
+
+.dashboard-stat-card.green{
+
+    background:linear-gradient(135deg,#16a34a,#22c55e);
+
+}
+
+.dashboard-stat-card.purple{
+
+    background:linear-gradient(135deg,#7c3aed,#9333ea);
+
+}
+
+.recent-invoice{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:15px 0;
+
+    border-bottom:1px solid #eef2f7;
+
+}
+
+.recent-invoice:last-child{
+
+    border:none;
+
+}
+
+@media(max-width:768px){
+
+    .dashboard-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:15px;
+
+    }
+
+}

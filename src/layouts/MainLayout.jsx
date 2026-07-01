@@ -1,26 +1,28 @@
-import Navbar
-from "../components/Navbar";
+import Navbar from "../components/Navbar";
+import "../styles/global.css";
 
-function MainLayout({
-
-    children
-
-}) {
+function MainLayout({ children }) {
 
     return (
 
         <>
-
             <Navbar />
 
-            <div
-                className=
-                "main-container"
-            >
+            <main className="main-layout">
 
-                {children}
+                <div className="main-wrapper">
 
-            </div>
+                    {children}
+
+                </div>
+
+            </main>
+
+            <footer className="footer">
+
+                © {new Date().getFullYear()} RK Plastic Invoice Management System
+
+            </footer>
 
         </>
 

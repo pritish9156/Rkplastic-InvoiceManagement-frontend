@@ -1,0 +1,63 @@
+/* ======================================
+        INVOICE VIEW
+====================================== */
+
+.invoice-detail-card{
+
+    border-radius:18px;
+
+    transition:.3s;
+
+}
+
+.invoice-detail-card:hover{
+
+    transform:translateY(-3px);
+
+}
+
+.invoice-detail-card strong{
+
+    color:#334155;
+
+}
+
+.invoice-detail-card p{
+
+    color:#64748b;
+
+    margin-top:6px;
+
+}
+
+.invoice-items-table th{
+
+    background:#f8fafc;
+
+    font-weight:700;
+
+}
+
+.invoice-items-table td{
+
+    vertical-align:middle;
+
+}
+
+.sticky-summary{
+
+    position:sticky;
+
+    top:95px;
+
+}
+
+@media(max-width:1200px){
+
+    .sticky-summary{
+
+        position:static;
+
+    }
+
+}

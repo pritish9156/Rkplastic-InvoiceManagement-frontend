@@ -1,14 +1,6 @@
-import {
-    useEffect,
-    useState
-}
-    from "react";
-
-import MainLayout
-    from "../layouts/MainLayout";
-
-import toast
-    from "react-hot-toast";
+import { useEffect, useState } from "react";
+import MainLayout from "../layouts/MainLayout";
+import toast from "react-hot-toast";
 
 import {
 
@@ -17,19 +9,59 @@ import {
     deleteCustomer
 
 }
-    from "../api/customerApi";
+from "../api/customerApi";
+
+import "../styles/customer.css"
 
 function Customers() {
 
     const [
+
         customers,
+
         setCustomers
+
     ] = useState([]);
 
     const [
+
         search,
+
         setSearch
+
     ] = useState("");
+
+    const [
+
+        loading,
+
+        setLoading
+
+    ] = useState(true);
+
+    const [
+
+        saving,
+
+        setSaving
+
+    ] = useState(false);
+
+    const [
+
+        deleting,
+
+        setDeleting
+
+    ] = useState(null);
+
+    const [
+
+        editingCustomer,
+
+        setEditingCustomer
+
+    ] = useState(null);
 
     useEffect(() => {
 
@@ -37,22 +69,41 @@ function Customers() {
 
     }, []);
 
-    const [editingCustomer,
-        setEditingCustomer]
-        =
-        useState(null);
+    const loadCustomers = async () => {
 
-    const loadCustomers =
-        async () => {
+        try {
+
+            setLoading(true);
 
             const response =
+
                 await getAllCustomers();
 
             setCustomers(
+
                 response.data
+
             );
 
-        };
+        }
+
+        catch {
+
+            toast.error(
+
+                "Failed to load customers."
+
+            );
+
+        }
+
+        finally {
+
+            setLoading(false);
+
+        }
+
+    };
 
     const filteredCustomers =
 
@@ -61,49 +112,74 @@ function Customers() {
             customer =>
 
                 customer.name
-                    ?.toLowerCase()
-                    .includes(
-                        search.toLowerCase()
-                    )
+
+                ?.toLowerCase()
+
+                .includes(
+
+                    search.toLowerCase()
+
+                )
 
         );
 
     const handleDelete =
-        async (id) => {
 
-            const confirmDelete =
+        async(id)=>{
+
+            const confirmDelete=
+
                 window.confirm(
-                    "Delete Customer ?"
+
+                    "Delete this customer?"
+
                 );
 
-            if (!confirmDelete)
+            if(!confirmDelete)
+
                 return;
 
-            try {
+            try{
+
+                setDeleting(id);
 
                 await deleteCustomer(id);
 
                 toast.success(
-                    "Customer Deleted"
+
+                    "Customer deleted."
+
                 );
 
                 loadCustomers();
 
             }
-            catch {
+
+            catch{
 
                 toast.error(
-                    "Delete Failed"
+
+                    "Delete failed."
+
                 );
+
+            }
+
+            finally{
+
+                setDeleting(null);
 
             }
 
         };
 
     const saveCustomer =
-        async () => {
 
-            try {
+        async()=>{
+
+            try{
+
+                setSaving(true);
 
                 await updateCustomer(
 
@@ -114,33 +190,132 @@ function Customers() {
                 );
 
                 toast.success(
-                    "Customer Updated"
+
+                    "Customer updated."
+
                 );
 
                 setEditingCustomer(
+
                     null
+
                 );
 
                 loadCustomers();
 
             }
-            catch {
+
+            catch{
 
                 toast.error(
-                    "Update Failed"
+
+                    "Update failed."
+
                 );
+
+            }
+
+            finally{
+
+                setSaving(false);
 
             }
 
         };
 
+    const gstRegistered =
+
+        customers.filter(
+
+            c =>
+
+            c.gstin &&
+
+            c.gstin.trim()!==''
+
+        ).length;
+
     return (
 
-        <MainLayout>
+    <MainLayout>
 
-            <div className="premium-card">
+        {/* =============================
+                PAGE HEADER
+        ============================== */}
 
-                <div className="d-flex justify-content-between mb-4">
+        <div className="row mb-4 g-3">
+
+            <div className="col-lg-4">
+
+                <div className="premium-stat-card">
+
+                    <h2>
+
+                        {customers.length}
+
+                    </h2>
+
+                    <small>
+
+                        Total Customers
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div className="col-lg-4">
+
+                <div className="premium-stat-card success">
+
+                    <h2>
+
+                        {gstRegistered}
+
+                    </h2>
+
+                    <small>
+
+                        GST Registered
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div className="col-lg-4">
+
+                <div className="premium-stat-card warning">
+
+                    <h2>
+
+                        {customers.length-gstRegistered}
+
+                    </h2>
+
+                    <small>
+
+                        Without GST
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {/* =============================
+                TABLE CARD
+        ============================== */}
+
+        <div className="premium-card">
+
+            <div className="table-header">
+
+                <div>
 
                     <h3>
 
@@ -148,347 +323,518 @@ function Customers() {
 
                     </h3>
 
-                    <span
-                        className="badge bg-primary"
-                    >
+                    <small>
 
-                        {customers.length}
+                        Manage all customers.
 
-                    </span>
+                    </small>
 
                 </div>
 
-                <input
+                <div style={{maxWidth:"350px",width:"100%"}}>
 
-                    className="form-control mb-4"
+                    <input
 
-                    placeholder="Search Customer"
+                        className="form-control premium-input"
 
-                    value={search}
+                        placeholder="🔍 Search customer..."
 
-                    onChange={(e) =>
+                        value={search}
 
-                        setSearch(
-                            e.target.value
-                        )
+                        onChange={(e)=>
 
-                    }
+                            setSearch(
 
-                />
-
-                <table
-                    className=
-                    "table premium-table"
-                >
-
-                    <thead>
-
-                        <tr>
-
-                            <th>Name</th>
-
-                            <th>GSTIN</th>
-
-                            <th>Phone</th>
-
-                            <th>Address</th>
-
-                            <th>Actions</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        {
-
-                            filteredCustomers.map(
-
-                                customer =>
-
-                                    <tr
-                                        key={
-                                            customer.id
-                                        }
-                                    >
-
-                                        <td>
-
-                                            <strong>
-
-                                                {
-                                                    customer.name
-                                                }
-
-                                            </strong>
-
-                                        </td>
-
-                                        <td>
-
-                                            {
-                                                customer.gstin
-                                            }
-
-                                        </td>
-
-                                        <td>
-
-                                            {
-                                                customer.phone
-                                            }
-
-                                        </td>
-
-                                        <td>
-
-                                            {
-                                                customer.address
-                                            }
-
-                                        </td>
-
-                                        <td>
-
-                                            <div
-                                                className="d-flex gap-2"
-                                            >
-
-                                                <button
-
-                                                    className=
-                                                    "btn btn-warning btn-sm"
-
-                                                    onClick={() =>
-
-                                                        setEditingCustomer(
-                                                            customer
-                                                        )
-
-                                                    }
-
-                                                >
-
-                                                    Edit
-
-                                                </button>
-
-                                                <button
-
-                                                    className=
-                                                    "btn btn-danger btn-sm"
-
-                                                    onClick={() =>
-
-                                                        handleDelete(
-                                                            customer.id
-                                                        )
-
-                                                    }
-
-                                                >
-
-                                                    Delete
-
-                                                </button>
-
-                                            </div>
-
-                                        </td>
-
-                                    </tr>
+                                e.target.value
 
                             )
 
                         }
 
-                    </tbody>
+                    />
 
-                </table>
+                </div>
 
-                {
-                    editingCustomer &&
+            </div>
+
+            {
+
+                loading ?
+
+                <>
+
+                    {
+
+                        [...Array(6)].map((_,i)=>
+
+                            <div
+
+                                key={i}
+
+                                className="placeholder-glow mb-3"
+
+                            >
+
+                                <span className="placeholder col-12 rounded"></span>
+
+                            </div>
+
+                        )
+
+                    }
+
+                </>
+
+                :
+
+                filteredCustomers.length===0 ?
+
+                <div className="text-center py-5">
+
+                    <h4>
+
+                        No Customers Found
+
+                    </h4>
+
+                    <p className="text-muted">
+
+                        Try another search.
+
+                    </p>
+
+                </div>
+
+                :
+
+                <div className="table-responsive">
+
+                    <table className="table premium-item-table align-middle">
+
+                        <thead>
+
+                        <tr>
+
+                            <th>
+
+                                Customer
+
+                            </th>
+
+                            <th>
+
+                                GSTIN
+
+                            </th>
+
+                            <th>
+
+                                Phone
+
+                            </th>
+
+                            <th>
+
+                                Address
+
+                            </th>
+
+                            <th width="170">
+
+                                Actions
+
+                            </th>
+
+                        </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                        {
+
+                            filteredCustomers.map(customer=>
+
+                                <tr key={customer.id}>
+
+                                    <td>
+
+                                        <strong>
+
+                                            {customer.name}
+
+                                        </strong>
+
+                                    </td>
+
+                                    <td>
+
+                                        {
+
+                                            customer.gstin ||
+
+                                            "-"
+
+                                        }
+
+                                    </td>
+
+                                    <td>
+
+                                        {
+
+                                            customer.phone ||
+
+                                            "-"
+
+                                        }
+
+                                    </td>
+
+                                    <td style={{maxWidth:"350px"}}>
+
+                                        {
+
+                                            customer.address ||
+
+                                            "-"
+
+                                        }
+
+                                    </td>
+
+                                    <td>
+
+                                        <div className="d-flex gap-2">
+
+                                            <button
+
+                                                className="btn btn-warning btn-sm"
+
+                                                onClick={()=>
+
+                                                    setEditingCustomer(
+
+                                                        {...customer}
+
+                                                    )
+
+                                                }
+
+                                            >
+
+                                                ✏ Edit
+
+                                            </button>
+
+                                            <button
+
+                                                className="btn btn-danger btn-sm"
+
+                                                disabled={
+
+                                                    deleting===customer.id
+
+                                                }
+
+                                                onClick={()=>
+
+                                                    handleDelete(
+
+                                                        customer.id
+
+                                                    )
+
+                                                }
+
+                                            >
+
+                                                {
+
+                                                    deleting===customer.id ?
+
+                                                    <>
+
+                                                        <span className="spinner-border spinner-border-sm"></span>
+
+                                                    </>
+
+                                                    :
+
+                                                    "🗑 Delete"
+
+                                                }
+
+                                            </button>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            )
+
+                        }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            }
+
+                        {/* ===============================
+                    EDIT CUSTOMER MODAL
+            ================================ */}
+
+            {
+
+                editingCustomer &&
+
+                <div
+                    className="premium-modal-backdrop"
+                    onClick={()=>
+
+                        setEditingCustomer(null)
+
+                    }
+                >
 
                     <div
-                        className="modal d-block"
-                        style={{
-                            background:
-                                "rgba(0,0,0,.5)"
-                        }}
+
+                        className="premium-modal"
+
+                        onClick={(e)=>
+
+                            e.stopPropagation()
+
+                        }
+
                     >
 
-                        <div className="modal-dialog">
+                        <div className="premium-modal-header">
 
-                            <div className="modal-content">
+                            <div>
 
-                                <div className="modal-header">
+                                <h4>
 
-                                    <h5>
+                                    Edit Customer
 
-                                        Edit Customer
+                                </h4>
 
-                                    </h5>
+                                <small>
 
-                                    <button
+                                    Update customer details.
 
-                                        className="btn-close"
+                                </small>
 
-                                        onClick={() =>
+                            </div>
 
-                                            setEditingCustomer(
-                                                null
-                                            )
+                            <button
 
-                                        }
+                                className="btn-close"
 
-                                    />
+                                onClick={()=>
 
-                                </div>
+                                    setEditingCustomer(null)
 
-                                <div className="modal-body">
+                                }
 
-                                    <input
+                            />
 
-                                        className="form-control mb-2"
+                        </div>
 
-                                        value={
-                                            editingCustomer.name
-                                        }
+                        <div className="premium-modal-body">
 
-                                        onChange={(e) =>
+                            <div className="mb-3">
 
-                                            setEditingCustomer({
+                                <label>
 
-                                                ...editingCustomer,
+                                    Customer Name
 
-                                                name: e.target.value
+                                </label>
 
-                                            })
+                                <input
 
-                                        }
+                                    className="form-control premium-input"
 
-                                    />
+                                    value={editingCustomer.name}
 
-                                    <input
+                                    onChange={(e)=>
 
-                                        className="form-control mb-2"
+                                        setEditingCustomer({
 
-                                        value={
-                                            editingCustomer.gstin
-                                        }
+                                            ...editingCustomer,
 
-                                        onChange={(e) =>
+                                            name:e.target.value
 
-                                            setEditingCustomer({
+                                        })
 
-                                                ...editingCustomer,
+                                    }
 
-                                                gstin: e.target.value
+                                />
 
-                                            })
+                            </div>
 
-                                        }
+                            <div className="mb-3">
 
-                                    />
+                                <label>
 
-                                    <input
+                                    GSTIN
 
-                                        className="form-control mb-2"
+                                </label>
 
-                                        value={
-                                            editingCustomer.phone
-                                        }
+                                <input
 
-                                        onChange={(e) =>
+                                    className="form-control premium-input"
 
-                                            setEditingCustomer({
+                                    value={editingCustomer.gstin}
 
-                                                ...editingCustomer,
+                                    onChange={(e)=>
 
-                                                phone: e.target.value
+                                        setEditingCustomer({
 
-                                            })
+                                            ...editingCustomer,
 
-                                        }
+                                            gstin:e.target.value
 
-                                    />
+                                        })
 
-                                    <textarea
+                                    }
 
-                                        className="form-control"
+                                />
 
-                                        value={
-                                            editingCustomer.address
-                                        }
+                            </div>
 
-                                        onChange={(e) =>
+                            <div className="mb-3">
 
-                                            setEditingCustomer({
+                                <label>
 
-                                                ...editingCustomer,
+                                    Phone
 
-                                                address: e.target.value
+                                </label>
 
-                                            })
+                                <input
 
-                                        }
+                                    className="form-control premium-input"
 
-                                    />
+                                    value={editingCustomer.phone}
 
-                                </div>
+                                    onChange={(e)=>
 
-                                <div className="modal-footer">
+                                        setEditingCustomer({
 
-                                    <button
+                                            ...editingCustomer,
 
-                                        className=
-                                        "btn btn-secondary"
+                                            phone:e.target.value
 
-                                        onClick={() =>
+                                        })
 
-                                            setEditingCustomer(
-                                                null
-                                            )
+                                    }
 
-                                        }
+                                />
 
-                                    >
+                            </div>
 
-                                        Cancel
+                            <div className="mb-3">
 
-                                    </button>
+                                <label>
 
-                                    <button
+                                    Address
 
-                                        className=
-                                        "btn btn-success"
+                                </label>
 
-                                        onClick={
-                                            saveCustomer
-                                        }
+                                <textarea
 
-                                    >
+                                    rows="4"
 
-                                        Save
+                                    className="form-control premium-input"
 
-                                    </button>
+                                    value={editingCustomer.address}
 
-                                </div>
+                                    onChange={(e)=>
+
+                                        setEditingCustomer({
+
+                                            ...editingCustomer,
+
+                                            address:e.target.value
+
+                                        })
+
+                                    }
+
+                                />
 
                             </div>
 
                         </div>
 
+                        <div className="premium-modal-footer">
+
+                            <button
+
+                                className="btn btn-light"
+
+                                disabled={saving}
+
+                                onClick={()=>
+
+                                    setEditingCustomer(null)
+
+                                }
+
+                            >
+
+                                Cancel
+
+                            </button>
+
+                            <button
+
+                                className="btn btn-premium"
+
+                                disabled={saving}
+
+                                onClick={saveCustomer}
+
+                            >
+
+                                {
+
+                                    saving ?
+
+                                    <>
+
+                                        <span className="spinner-border spinner-border-sm me-2"></span>
+
+                                        Saving...
+
+                                    </>
+
+                                    :
+
+                                    "Save Changes"
+
+                                }
+
+                            </button>
+
+                        </div>
+
                     </div>
 
-                }
+                </div>
 
-            </div>
+            }
 
-        </MainLayout>
+        </div>
 
-    );
+    </MainLayout>
+
+);
 
 }
 

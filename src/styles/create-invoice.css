@@ -1,0 +1,351 @@
+/* ==========================================
+        CREATE INVOICE PAGE
+========================================== */
+
+.page-title{
+
+    font-size:32px;
+
+    font-weight:700;
+
+    color:#1e293b;
+
+}
+
+.section-title{
+
+    font-size:20px;
+
+    font-weight:700;
+
+    color:#334155;
+
+    margin-bottom:18px;
+
+}
+
+.premium-section{
+
+    background:#ffffff;
+
+    border:1px solid #edf2f7;
+
+    border-radius:18px;
+
+    padding:24px;
+
+    transition:.3s;
+
+}
+
+.premium-section:hover{
+
+    border-color:#dbeafe;
+
+    box-shadow:0 12px 30px rgba(59,130,246,.08);
+
+}
+
+.premium-card{
+
+    background:#fff;
+
+    border-radius:20px;
+
+    border:none;
+
+    box-shadow:0 18px 45px rgba(15,23,42,.08);
+
+    padding:25px;
+
+}
+
+.premium-input{
+
+    min-height:48px;
+
+    border-radius:12px;
+
+    border:1px solid #dbe3ec;
+
+    transition:.25s;
+
+}
+
+.premium-input:focus{
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 .18rem rgba(37,99,235,.15);
+
+}
+
+textarea.premium-input{
+
+    min-height:120px;
+
+}
+
+label{
+
+    font-weight:600;
+
+    margin-bottom:8px;
+
+    color:#475569;
+
+}
+
+/* ===============================
+      CUSTOMER CARD
+================================ */
+
+.customer-preview{
+
+    background:linear-gradient(
+            135deg,
+            #eff6ff,
+            #ffffff);
+
+    border-radius:20px;
+
+    border:1px solid #dbeafe;
+
+    padding:24px;
+
+}
+
+.customer-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.customer-header h5{
+
+    margin:0;
+
+    font-weight:700;
+
+}
+
+.customer-header small{
+
+    color:#64748b;
+
+}
+
+.customer-preview p{
+
+    margin-top:8px;
+
+    color:#334155;
+
+    word-break:break-word;
+
+}
+
+/* ===============================
+        STATUS CARD
+================================ */
+
+.status-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:12px 0;
+
+    border-bottom:1px dashed #e5e7eb;
+
+}
+
+.status-row:last-child{
+
+    border:none;
+
+}
+
+.status-row span{
+
+    color:#64748b;
+
+}
+
+.status-row strong{
+
+    color:#1e293b;
+
+}
+
+/* ===============================
+      STICKY SUMMARY
+================================ */
+
+.sticky-summary{
+
+    position:sticky;
+
+    top:95px;
+
+}
+
+/* ===============================
+      BUTTON
+================================ */
+
+.btn-premium{
+
+    background:linear-gradient(
+            135deg,
+            #2563eb,
+            #4f46e5);
+
+    color:white;
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:12px 28px;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.btn-premium:hover{
+
+    color:white;
+
+    transform:translateY(-2px);
+
+    box-shadow:0 14px 28px rgba(37,99,235,.30);
+
+}
+
+.btn-premium:disabled{
+
+    opacity:.75;
+
+    cursor:not-allowed;
+
+}
+
+/* ===============================
+     PLACEHOLDER LOADING
+================================ */
+
+.placeholder{
+
+    height:48px;
+
+    border-radius:12px;
+
+}
+
+/* ===============================
+      MOBILE
+================================ */
+
+@media(max-width:1200px){
+
+    .sticky-summary{
+
+        position:static;
+
+    }
+
+}
+
+@media(max-width:992px){
+
+    .page-title{
+
+        font-size:28px;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .premium-card{
+
+        padding:18px;
+
+    }
+
+    .premium-section{
+
+        padding:18px;
+
+    }
+
+    .customer-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:12px;
+
+    }
+
+    .status-row{
+
+        font-size:14px;
+
+    }
+
+    .btn-premium{
+
+        width:100%;
+
+    }
+
+}
+
+@media(max-width:576px){
+
+    .page-title{
+
+        font-size:24px;
+
+    }
+
+    .section-title{
+
+        font-size:18px;
+
+    }
+
+    .premium-card{
+
+        border-radius:16px;
+
+        padding:15px;
+
+    }
+
+    .premium-section{
+
+        border-radius:16px;
+
+        padding:15px;
+
+    }
+
+    .customer-preview{
+
+        padding:18px;
+
+    }
+
+}

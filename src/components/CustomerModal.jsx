@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createCustomer } from "../api/customerApi";
 import toast from "react-hot-toast";
+import "../styles/global.css";
 
 function CustomerModal({
 
@@ -10,153 +11,293 @@ function CustomerModal({
 
 }) {
 
-    const [form,setForm]
-        =
+    const [loading, setLoading] =
+        useState(false);
+
+    const [form, setForm] =
         useState({
 
-            name:"",
-            address:"",
-            gstin:"",
-            phone:""
+            name: "",
+            address: "",
+            gstin: "",
+            phone: ""
 
         });
 
-    const handleChange =
-        (e)=>{
+    useEffect(() => {
+
+        if (!show) {
 
             setForm({
 
-                ...form,
-
-                [e.target.name]:
-                    e.target.value
+                name: "",
+                address: "",
+                gstin: "",
+                phone: ""
 
             });
 
-        };
+            setLoading(false);
 
-    const saveCustomer =
-        async()=>{
+        }
 
-            try{
+    }, [show]);
 
-                if(!form.name){
+    const handleChange = (e) => {
 
-                    toast.error(
-                        "Customer name required"
-                    );
+        setForm({
 
-                    return;
-                }
+            ...form,
 
-                const response =
-                    await createCustomer(
-                        form
-                    );
+            [e.target.name]:
+                e.target.value
 
-                toast.success(
-                    "Customer Created"
-                );
+        });
 
-                onCustomerCreated(
-                    response.data.data
-                );
+    };
 
-                onClose();
+    const saveCustomer = async () => {
 
-            }
-            catch{
+        if (!form.name.trim()) {
 
-                toast.error(
-                    "Failed to create customer"
-                );
+            toast.error(
+                "Customer name is required."
+            );
 
-            }
+            return;
 
-        };
+        }
 
-    if(!show)
+        try {
+
+            setLoading(true);
+
+            const response =
+                await createCustomer(form);
+
+            toast.success(
+                "Customer created successfully."
+            );
+
+            onCustomerCreated(
+                response.data.data
+            );
+
+            onClose();
+
+        }
+        catch {
+
+            toast.error(
+                "Unable to create customer."
+            );
+
+        }
+        finally {
+
+            setLoading(false);
+
+        }
+
+    };
+
+    if (!show)
         return null;
 
     return (
 
         <div
-            className="modal d-block"
-            style={{
-                background:
-                "rgba(0,0,0,.5)"
-            }}
+            className="premium-modal-backdrop"
+            onClick={onClose}
         >
 
-            <div className="modal-dialog modal-lg">
+            <div
+                className="premium-modal"
+                onClick={(e) => e.stopPropagation()}
+            >
 
-                <div className="modal-content">
+                <div className="premium-modal-header">
 
-                    <div className="modal-header">
+                    <div>
 
-                        <h5>
+                        <h4>
 
                             Add Customer
 
-                        </h5>
+                        </h4>
 
-                        <button
-                            className="btn-close"
-                            onClick={onClose}
+                        <small>
+
+                            Enter customer information.
+
+                        </small>
+
+                    </div>
+
+                    <button
+                        className="btn-close"
+                        onClick={onClose}
+                    />
+
+                </div>
+
+                <div className="premium-modal-body">
+
+                    <div className="mb-3">
+
+                        <label>
+
+                            Customer Name
+
+                        </label>
+
+                        <input
+
+                            type="text"
+
+                            name="name"
+
+                            value={form.name}
+
+                            onChange={handleChange}
+
+                            className="form-control premium-input"
+
+                            placeholder="Enter customer name"
+
                         />
 
                     </div>
 
-                    <div className="modal-body">
+                    <div className="mb-3">
 
-                        <input
-                            name="name"
-                            placeholder="Customer Name"
-                            className="form-control mb-3"
-                            onChange={handleChange}
-                        />
+                        <label>
+
+                            Address
+
+                        </label>
 
                         <textarea
-                            name="address"
-                            placeholder="Address"
+
                             rows="4"
-                            className="form-control mb-3"
-                            onChange={handleChange}
-                        />
 
-                        <input
-                            name="gstin"
-                            placeholder="GSTIN"
-                            className="form-control mb-3"
-                            onChange={handleChange}
-                        />
+                            name="address"
 
-                        <input
-                            name="phone"
-                            placeholder="Phone"
-                            className="form-control"
+                            value={form.address}
+
                             onChange={handleChange}
+
+                            className="form-control premium-input"
+
+                            placeholder="Enter address"
+
                         />
 
                     </div>
 
-                    <div className="modal-footer">
+                    <div className="row">
 
-                        <button
-                            className="btn btn-secondary"
-                            onClick={onClose}
-                        >
-                            Cancel
-                        </button>
+                        <div className="col-md-6 mb-3">
 
-                        <button
-                            className="btn btn-premium"
-                            onClick={saveCustomer}
-                        >
-                            Save Customer
-                        </button>
+                            <label>
+
+                                GSTIN
+
+                            </label>
+
+                            <input
+
+                                type="text"
+
+                                name="gstin"
+
+                                value={form.gstin}
+
+                                onChange={handleChange}
+
+                                className="form-control premium-input"
+
+                                placeholder="GST Number"
+
+                            />
+
+                        </div>
+
+                        <div className="col-md-6 mb-3">
+
+                            <label>
+
+                                Phone
+
+                            </label>
+
+                            <input
+
+                                type="text"
+
+                                name="phone"
+
+                                value={form.phone}
+
+                                onChange={handleChange}
+
+                                className="form-control premium-input"
+
+                                placeholder="Phone Number"
+
+                            />
+
+                        </div>
 
                     </div>
+
+                </div>
+
+                <div className="premium-modal-footer">
+
+                    <button
+
+                        className="btn btn-light"
+
+                        disabled={loading}
+
+                        onClick={onClose}
+
+                    >
+
+                        Cancel
+
+                    </button>
+
+                    <button
+
+                        className="btn btn-premium"
+
+                        disabled={loading}
+
+                        onClick={saveCustomer}
+
+                    >
+
+                        {
+
+                            loading ?
+
+                                <>
+
+                                    <span className="spinner-border spinner-border-sm me-2"></span>
+
+                                    Saving...
+
+                                </>
+
+                                :
+
+                                "Save Customer"
+
+                        }
+
+                    </button>
 
                 </div>
 

@@ -1,81 +1,75 @@
-import { useEffect, useState }
-from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-import MainLayout
-from "../layouts/MainLayout";
+import MainLayout from "../layouts/MainLayout";
 
-import { Link }
-from "react-router-dom";
+import { getAllInvoices } from "../api/billApi";
 
-import {
-    getAllInvoices
-}
-from "../api/billApi";
+import "../styles/dashboard.css"
 
 function Dashboard() {
 
-    const [
-        totalInvoices,
-        setTotalInvoices
-    ] = useState(0);
+    const [loading, setLoading] = useState(true);
 
-    const [
-        totalRevenue,
-        setTotalRevenue
-    ] = useState(0);
+    const [invoices, setInvoices] = useState([]);
+
+    const [totalRevenue, setTotalRevenue] = useState(0);
 
     useEffect(() => {
 
-        loadData();
+        loadDashboard();
 
     }, []);
 
-    const loadData =
-        async () => {
+    const loadDashboard = async () => {
 
-            try {
+        try {
 
-                const response =
-                    await getAllInvoices();
+            setLoading(true);
 
-                const invoices =
-                    response.data;
+            const response = await getAllInvoices();
 
-                setTotalInvoices(
-                    invoices.length
-                );
+            const data = response.data;
 
-                const revenue =
+            setInvoices(data);
 
-                    invoices.reduce(
+            const revenue = data.reduce(
 
-                        (
-                            sum,
-                            invoice
-                        ) =>
+                (sum, invoice) =>
 
-                            sum +
+                    sum +
 
-                            Number(
-                                invoice.grandTotal || 0
-                            ),
+                    Number(invoice.grandTotal || 0),
 
-                        0
+                0
 
-                    );
+            );
 
-                setTotalRevenue(
-                    revenue
-                );
+            setTotalRevenue(revenue);
 
-            }
-            catch (error) {
+        }
 
-                console.log(error);
+        catch (e) {
 
-            }
+            console.log(e);
 
-        };
+        }
+
+        finally {
+
+            setLoading(false);
+
+        }
+
+    };
+
+    const latestInvoices =
+
+        [...invoices]
+
+            .sort((a, b) => b.billNo - a.billNo)
+
+            .slice(0, 5);
 
     return (
 
@@ -83,75 +77,135 @@ function Dashboard() {
 
             <div className="dashboard-header">
 
-                <h2>
+                <div>
 
-                    Dashboard
+                    <h2>
 
-                </h2>
+                        Welcome 👋
 
-                <p>
+                    </h2>
 
-                    RK Plastics Invoice Management
+                    <p>
 
-                </p>
+                        RK Plastics Invoice Management Dashboard
+
+                    </p>
+
+                </div>
+
+                <div>
+
+                    <span className="badge bg-primary fs-6">
+
+                        {
+
+                            new Date().toLocaleDateString()
+
+                        }
+
+                    </span>
+
+                </div>
 
             </div>
+
+            {/* KPI */}
 
             <div className="row g-4">
 
-                <div className="col-md-4">
+                <div className="col-lg-4">
 
-                    <div className="stats-card blue-card">
+                    <div className="dashboard-stat-card blue">
 
-                        <h6>
+                        <small>
 
                             Total Invoices
 
-                        </h6>
+                        </small>
 
-                        <h2>
+                        {
 
-                            {totalInvoices}
+                            loading ?
 
-                        </h2>
+                            <div className="placeholder-glow">
+
+                                <span className="placeholder col-6"></span>
+
+                            </div>
+
+                            :
+
+                            <h2>
+
+                                {invoices.length}
+
+                            </h2>
+
+                        }
 
                     </div>
 
                 </div>
 
-                <div className="col-md-4">
+                <div className="col-lg-4">
 
-                    <div className="stats-card green-card">
+                    <div className="dashboard-stat-card green">
 
-                        <h6>
+                        <small>
 
                             Revenue
 
-                        </h6>
+                        </small>
 
-                        <h2>
+                        {
 
-                            ₹ {totalRevenue.toLocaleString()}
+                            loading ?
 
-                        </h2>
+                            <div className="placeholder-glow">
+
+                                <span className="placeholder col-8"></span>
+
+                            </div>
+
+                            :
+
+                            <h2>
+
+                                ₹ {totalRevenue.toLocaleString()}
+
+                            </h2>
+
+                        }
 
                     </div>
 
                 </div>
 
-                <div className="col-md-4">
+                <div className="col-lg-4">
 
-                    <div className="stats-card dark-card">
+                    <div className="dashboard-stat-card purple">
 
-                        <h6>
+                        <small>
 
-                            Customers
+                            Latest Invoice
 
-                        </h6>
+                        </small>
 
                         <h2>
 
-                            Active
+                            {
+
+                                invoices.length
+
+                                ?
+
+                                invoices[invoices.length-1].billNo
+
+                                :
+
+                                "-"
+
+                            }
 
                         </h2>
 
@@ -161,67 +215,153 @@ function Dashboard() {
 
             </div>
 
-            <div className="row mt-4">
+            {/* Quick Actions */}
 
-                <div className="col-md-6">
+            <div className="row mt-4 g-4">
+
+                <div className="col-lg-6">
 
                     <div className="premium-card">
 
                         <h4>
 
-                            Create Invoice
+                            Quick Actions
 
                         </h4>
 
-                        <p>
+                        <p className="text-muted">
 
-                            Generate a new GST invoice.
+                            Create invoices and manage customers quickly.
 
                         </p>
 
-                        <Link
+                        <div className="d-flex flex-wrap gap-3">
 
-                            to="/invoice/create"
+                            <Link
 
-                            className="btn btn-success"
+                                to="/invoice/create"
 
-                        >
+                                className="btn btn-premium"
 
-                            Create Now
+                            >
 
-                        </Link>
+                                Create Invoice
+
+                            </Link>
+
+                            <Link
+
+                                to="/customers"
+
+                                className="btn btn-outline-primary"
+
+                            >
+
+                                Customers
+
+                            </Link>
+
+                            <Link
+
+                                to="/reports"
+
+                                className="btn btn-outline-success"
+
+                            >
+
+                                Reports
+
+                            </Link>
+
+                        </div>
 
                     </div>
 
                 </div>
 
-                <div className="col-md-6">
+                <div className="col-lg-6">
 
                     <div className="premium-card">
 
                         <h4>
 
-                            Manage Invoices
+                            Recent Invoices
 
                         </h4>
 
-                        <p>
+                        {
 
-                            View, edit and download invoices.
+                            loading ?
 
-                        </p>
+                            <div className="placeholder-glow">
 
-                        <Link
+                                {
 
-                            to="/invoices"
+                                    [...Array(5)].map((_, i) =>
 
-                            className="btn btn-primary"
+                                        <p key={i}>
 
-                        >
+                                            <span className="placeholder col-12"></span>
 
-                            Open
+                                        </p>
 
-                        </Link>
+                                    )
+
+                                }
+
+                            </div>
+
+                            :
+
+                            latestInvoices.length === 0 ?
+
+                            <p className="text-muted">
+
+                                No invoices available.
+
+                            </p>
+
+                            :
+
+                            latestInvoices.map(invoice =>
+
+                                <div
+
+                                    key={invoice.id}
+
+                                    className="recent-invoice"
+
+                                >
+
+                                    <div>
+
+                                        <strong>
+
+                                            Invoice #{invoice.billNo}
+
+                                        </strong>
+
+                                        <br/>
+
+                                        <small>
+
+                                            {invoice.customer?.name}
+
+                                        </small>
+
+                                    </div>
+
+                                    <strong>
+
+                                        ₹ {Number(invoice.grandTotal).toLocaleString()}
+
+                                    </strong>
+
+                                </div>
+
+                            )
+
+                        }
 
                     </div>
 

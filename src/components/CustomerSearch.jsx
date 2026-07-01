@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { searchCustomers } from "../api/customerApi";
+import "../styles/global.css";
 
 function CustomerSearch({
 
@@ -7,100 +8,181 @@ function CustomerSearch({
 
 }) {
 
-    const [keyword,setKeyword]
-        =
+    const [keyword, setKeyword] =
         useState("");
 
-    const [customers,
-        setCustomers]
-        =
+    const [customers, setCustomers] =
         useState([]);
 
-    const handleSearch =
-        async(value)=>{
+    const [loading, setLoading] =
+        useState(false);
 
-            setKeyword(value);
+    const timeoutRef =
+        useRef();
 
-            if(value.length < 2){
+    useEffect(() => {
 
-                setCustomers([]);
+        clearTimeout(timeoutRef.current);
 
-                return;
-            }
+        if (keyword.trim().length < 2) {
 
-            const response =
-                await searchCustomers(
-                    value
-                );
+            setCustomers([]);
 
-            setCustomers(
-                response.data
-            );
-        };
+            return;
+
+        }
+
+        timeoutRef.current =
+            setTimeout(async () => {
+
+                try {
+
+                    setLoading(true);
+
+                    const response =
+                        await searchCustomers(keyword);
+
+                    setCustomers(
+                        response.data
+                    );
+
+                }
+                finally {
+
+                    setLoading(false);
+
+                }
+
+            }, 400);
+
+        return () =>
+            clearTimeout(timeoutRef.current);
+
+    }, [keyword]);
 
     return (
 
-        <div
-            className="position-relative"
-        >
+        <div className="customer-search">
 
-            <input
-                className="form-control"
-                placeholder="Search Customer..."
-                value={keyword}
-                onChange={(e)=>
-                    handleSearch(
-                        e.target.value
-                    )
+            <div className="position-relative">
+
+                <input
+
+                    className="form-control premium-input"
+
+                    placeholder="🔍 Search customer by name..."
+
+                    value={keyword}
+
+                    onChange={(e) =>
+
+                        setKeyword(
+                            e.target.value
+                        )
+
+                    }
+
+                />
+
+                {
+
+                    loading &&
+
+                    <div className="search-loader">
+
+                        <div className="spinner-border spinner-border-sm text-primary"></div>
+
+                    </div>
+
                 }
-            />
+
+            </div>
 
             {
 
                 customers.length > 0 &&
 
-                <div className="search-dropdown">
+                <div className="customer-dropdown">
 
                     {
 
-                        customers.map(
+                        customers.map(customer =>
 
-                            customer=>
+                            <div
 
-                                <div
+                                key={customer.id}
 
-                                    key={
-                                        customer.id
-                                    }
+                                className="customer-card"
 
-                                    className=
-                                    "search-item"
+                                onClick={() => {
 
-                                    onClick={()=>{
+                                    onCustomerSelect(customer);
 
-                                        onCustomerSelect(
-                                            customer
-                                        );
+                                    setKeyword(customer.name);
 
-                                        setKeyword(
-                                            customer.name
-                                        );
+                                    setCustomers([]);
 
-                                        setCustomers(
-                                            []
-                                        );
+                                }}
 
-                                    }}
+                            >
 
-                                >
+                                <div>
 
-                                    {customer.name}
+                                    <h6>
+
+                                        {customer.name}
+
+                                    </h6>
+
+                                    <small>
+
+                                        GSTIN :
+                                        {" "}
+                                        {
+
+                                            customer.gstin ||
+
+                                            "N/A"
+
+                                        }
+
+                                    </small>
 
                                 </div>
+
+                                <small className="customer-phone">
+
+                                    {
+
+                                        customer.phone ||
+
+                                        ""
+
+                                    }
+
+                                </small>
+
+                            </div>
 
                         )
 
                     }
+
+                </div>
+
+            }
+
+            {
+
+                !loading &&
+
+                keyword.length >= 2 &&
+
+                customers.length === 0 &&
+
+                <div className="customer-empty">
+
+                    No customer found.
 
                 </div>
 

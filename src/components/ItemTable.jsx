@@ -1,3 +1,5 @@
+import "../styles/global.css";
+
 function ItemTable({
 
     items,
@@ -5,22 +7,21 @@ function ItemTable({
 
 }) {
 
-    const updateItem =
-        (
-            index,
-            field,
-            value
-        ) => {
+    const updateItem = (
 
-            const updated =
-                [...items];
+        index,
+        field,
+        value
 
-            updated[index][field]
-                =
-                value;
+    ) => {
 
-            setItems(updated);
-        };
+        const updated = [...items];
+
+        updated[index][field] = value;
+
+        setItems(updated);
+
+    };
 
     const addRow = () => {
 
@@ -29,71 +30,105 @@ function ItemTable({
             ...items,
 
             {
+
                 description: "",
+
                 hsnSac: "",
+
                 qty: 1,
+
                 rate: 0
+
             }
 
         ]);
 
     };
 
-    const removeRow =
-        (index) => {
+    const removeRow = (index) => {
 
-            if(items.length===1)
-                return;
+        if (items.length === 1)
+            return;
 
-            const updated =
-                [...items];
+        const updated = [...items];
 
-            updated.splice(
-                index,
-                1
-            );
+        updated.splice(index, 1);
 
-            setItems(
-                updated
-            );
+        setItems(updated);
 
-        };
+    };
 
     return (
 
         <div className="premium-card">
 
-            <div className="d-flex justify-content-between mb-3">
+            <div className="table-header">
 
-                <h5>
+                <div>
 
-                    Invoice Items
+                    <h4>
 
-                </h5>
+                        Invoice Items
+
+                    </h4>
+
+                    <small>
+
+                        Add products/services for this invoice.
+
+                    </small>
+
+                </div>
 
                 <button
+
                     className="btn btn-premium"
+
                     onClick={addRow}
+
                 >
+
                     + Add Item
+
                 </button>
 
             </div>
 
             <div className="table-responsive">
 
-                <table className="table premium-table">
+                <table className="table premium-item-table align-middle">
 
                     <thead>
 
                     <tr>
 
                         <th>Description</th>
-                        <th>HSN/SAC</th>
-                        <th>Qty</th>
-                        <th>Rate</th>
-                        <th>Amount</th>
-                        <th></th>
+
+                        <th>HSN / SAC</th>
+
+                        <th width="120">
+
+                            Qty
+
+                        </th>
+
+                        <th width="140">
+
+                            Rate
+
+                        </th>
+
+                        <th width="160">
+
+                            Amount
+
+                        </th>
+
+                        <th width="90">
+
+                            Action
+
+                        </th>
 
                     </tr>
 
@@ -103,26 +138,42 @@ function ItemTable({
 
                     {
 
-                        items.map(
+                        items.map((item, index) => {
 
-                            (item,index)=>
+                            const amount =
+
+                                Number(item.qty || 0) *
+
+                                Number(item.rate || 0);
+
+                            return (
 
                                 <tr key={index}>
 
                                     <td>
 
                                         <input
-                                            className="form-control"
+
+                                            className="form-control premium-input"
+
+                                            placeholder="Product Description"
+
                                             value={item.description}
-                                            onChange={(e)=>
+
+                                            onChange={(e) =>
 
                                                 updateItem(
+
                                                     index,
+
                                                     "description",
+
                                                     e.target.value
+
                                                 )
 
                                             }
+
                                         />
 
                                     </td>
@@ -130,17 +181,27 @@ function ItemTable({
                                     <td>
 
                                         <input
-                                            className="form-control"
+
+                                            className="form-control premium-input"
+
+                                            placeholder="HSN/SAC"
+
                                             value={item.hsnSac}
-                                            onChange={(e)=>
+
+                                            onChange={(e) =>
 
                                                 updateItem(
+
                                                     index,
+
                                                     "hsnSac",
+
                                                     e.target.value
+
                                                 )
 
                                             }
+
                                         />
 
                                     </td>
@@ -148,18 +209,29 @@ function ItemTable({
                                     <td>
 
                                         <input
+
                                             type="number"
-                                            className="form-control"
+
+                                            min="1"
+
+                                            className="form-control premium-input"
+
                                             value={item.qty}
-                                            onChange={(e)=>
+
+                                            onChange={(e) =>
 
                                                 updateItem(
+
                                                     index,
+
                                                     "qty",
+
                                                     e.target.value
+
                                                 )
 
                                             }
+
                                         />
 
                                     </td>
@@ -167,56 +239,68 @@ function ItemTable({
                                     <td>
 
                                         <input
+
                                             type="number"
-                                            className="form-control"
+
+                                            min="0"
+
+                                            className="form-control premium-input"
+
                                             value={item.rate}
-                                            onChange={(e)=>
+
+                                            onChange={(e) =>
 
                                                 updateItem(
+
                                                     index,
+
                                                     "rate",
+
                                                     e.target.value
+
                                                 )
 
                                             }
+
                                         />
 
                                     </td>
 
                                     <td>
 
-                                        ₹ {
+                                        <div className="amount-box">
 
-                                            (
-                                                Number(item.qty)
-                                                *
-                                                Number(item.rate)
-                                            ).toFixed(2)
+                                            ₹ {amount.toFixed(2)}
 
-                                        }
+                                        </div>
 
                                     </td>
 
                                     <td>
 
                                         <button
-                                            className="btn btn-danger"
-                                            onClick={()=>
 
-                                                removeRow(
-                                                    index
-                                                )
+                                            className="btn btn-outline-danger btn-sm"
+
+                                            onClick={() =>
+
+                                                removeRow(index)
 
                                             }
+
                                         >
-                                            Remove
+
+                                            ✕
+
                                         </button>
 
                                     </td>
 
                                 </tr>
 
-                        )
+                            );
+
+                        })
 
                     }
 
