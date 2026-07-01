@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API =
-"http://localhost:8080/Rkplastic-InvoiceManagement/api/customers";
+"http://192.168.0.100/Rkplastic-InvoiceManagement/api/customers";
 
 export const getAllCustomers =
 () => axios.get(`${API}/all`);
