@@ -3,6 +3,6 @@ import axios from "axios";
 export default axios.create({
 
  baseURL:
- "http://192.168.0.100:8080/Rkplastic-InvoiceManagement/api"
+ "http://localhost:8080/Rkplastic-InvoiceManagement/api"
 
 });

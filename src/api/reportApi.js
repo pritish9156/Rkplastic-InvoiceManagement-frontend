@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const BASE_URL =
-    "http://192.168.0.100/Rkplastic-InvoiceManagement/api/reports";
+    "http://localhost:8080/Rkplastic-InvoiceManagement/api/reports";
 
 const api = axios.create({
 
