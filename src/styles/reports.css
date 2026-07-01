@@ -1,0 +1,467 @@
+/* ==========================================================
+   REPORTS PAGE
+========================================================== */
+
+.reports-page{
+    padding:30px;
+    animation:fadeIn .5s ease;
+}
+
+.page-title{
+    font-size:32px;
+    font-weight:700;
+    color:#1f2937;
+    margin-bottom:30px;
+}
+
+
+/* ==========================================================
+   DASHBOARD CARDS
+========================================================== */
+
+.report-cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:25px;
+}
+
+.report-card{
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:#ffffff;
+
+    border-radius:20px;
+
+    padding:28px;
+
+    transition:.35s;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.08);
+
+    cursor:pointer;
+
+}
+
+.report-card:hover{
+
+    transform:
+    translateY(-8px);
+
+    box-shadow:
+    0 20px 45px rgba(37,99,235,.18);
+
+}
+
+.report-card svg{
+
+    width:42px;
+
+    height:42px;
+
+    color:#2563eb;
+
+    margin-bottom:18px;
+
+}
+
+.report-card h5{
+
+    color:#6b7280;
+
+    font-size:15px;
+
+    margin-bottom:10px;
+
+    font-weight:600;
+
+}
+
+.report-card h2{
+
+    font-size:34px;
+
+    font-weight:700;
+
+    color:#111827;
+
+}
+
+.report-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:220px;
+
+    height:220px;
+
+    background:
+
+    radial-gradient(circle,
+
+    rgba(37,99,235,.18),
+
+    transparent);
+
+    top:-120px;
+
+    right:-120px;
+
+}
+
+
+/* ==========================================================
+   PREMIUM CARD
+========================================================== */
+
+.premium-card{
+
+    background:#ffffff;
+
+    border-radius:20px;
+
+    padding:28px;
+
+    margin-top:25px;
+
+    box-shadow:
+
+    0 12px 35px rgba(0,0,0,.08);
+
+}
+
+.premium-card h4{
+
+    font-weight:700;
+
+    color:#111827;
+
+    margin-bottom:25px;
+
+}
+
+
+/* ==========================================================
+   FILTER INPUTS
+========================================================== */
+
+.premium-card label{
+
+    font-weight:600;
+
+    color:#374151;
+
+    margin-bottom:8px;
+
+}
+
+.premium-card input{
+
+    height:48px;
+
+    border-radius:12px;
+
+    border:1px solid #d1d5db;
+
+    transition:.3s;
+
+}
+
+.premium-card input:focus{
+
+    border-color:#2563eb;
+
+    box-shadow:
+
+    0 0 0 4px rgba(37,99,235,.12);
+
+}
+
+
+/* ==========================================================
+   BUTTONS
+========================================================== */
+
+.btn{
+
+    border-radius:12px;
+
+    padding:10px 22px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.btn svg{
+
+    margin-right:8px;
+
+}
+
+.btn-success{
+
+    background:#16a34a;
+
+    border:none;
+
+}
+
+.btn-success:hover{
+
+    transform:translateY(-3px);
+
+}
+
+.btn-warning{
+
+    color:white;
+
+    border:none;
+
+}
+
+.btn-warning:hover{
+
+    transform:translateY(-3px);
+
+}
+
+.btn-dark:hover{
+
+    transform:translateY(-3px);
+
+}
+
+.btn-primary:hover{
+
+    transform:translateY(-3px);
+
+}
+
+
+/* ==========================================================
+   TABLE
+========================================================== */
+
+.table{
+
+    margin-top:15px;
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+}
+
+.table thead{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+.table th{
+
+    border:none;
+
+    padding:16px;
+
+}
+
+.table td{
+
+    padding:16px;
+
+    vertical-align:middle;
+
+}
+
+.table tbody tr{
+
+    transition:.25s;
+
+}
+
+.table tbody tr:hover{
+
+    background:#eff6ff;
+
+}
+
+
+/* ==========================================================
+   KPI COLORS
+========================================================== */
+
+.report-card:nth-child(1){
+
+    border-left:6px solid #2563eb;
+
+}
+
+.report-card:nth-child(2){
+
+    border-left:6px solid #16a34a;
+
+}
+
+.report-card:nth-child(3){
+
+    border-left:6px solid #f59e0b;
+
+}
+
+.report-card:nth-child(4){
+
+    border-left:6px solid #dc2626;
+
+}
+
+
+/* ==========================================================
+   DOWNLOAD BUTTON GROUP
+========================================================== */
+
+.download-group{
+
+    display:flex;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+}
+
+
+/* ==========================================================
+   EMPTY STATE
+========================================================== */
+
+.empty-report{
+
+    text-align:center;
+
+    padding:70px;
+
+    color:#9ca3af;
+
+}
+
+.empty-report svg{
+
+    width:90px;
+
+    height:90px;
+
+    margin-bottom:15px;
+
+}
+
+
+/* ==========================================================
+   LOADER
+========================================================== */
+
+.loader{
+
+    width:55px;
+
+    height:55px;
+
+    border-radius:50%;
+
+    border:5px solid #dbeafe;
+
+    border-top:5px solid #2563eb;
+
+    animation:spin 1s linear infinite;
+
+    margin:auto;
+
+}
+
+
+/* ==========================================================
+   ANIMATIONS
+========================================================== */
+
+@keyframes spin{
+
+    to{
+
+        transform:rotate(360deg);
+
+    }
+
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media(max-width:992px){
+
+    .report-cards{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .report-cards{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .reports-page{
+
+        padding:15px;
+
+    }
+
+    .premium-card{
+
+        padding:18px;
+
+    }
+
+    .page-title{
+
+        font-size:26px;
+
+    }
+
+}

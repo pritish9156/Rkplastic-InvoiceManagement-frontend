@@ -1,0 +1,102 @@
+.premium-card{
+    background:#fff;
+    border-radius:20px;
+    padding:24px;
+    box-shadow:0 10px 30px rgba(0,0,0,.06);
+    border:1px solid #eef2f7;
+}
+
+.premium-table{
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,.05);
+}
+
+.premium-table thead{
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    color:white;
+}
+
+.premium-table th{
+    padding:15px !important;
+    border:none !important;
+}
+
+.premium-table td{
+    vertical-align:middle;
+}
+
+.nav-btn{
+    text-decoration:none;
+    margin-left:15px;
+    color:#334155;
+    font-weight:600;
+    transition:.3s;
+}
+
+.nav-btn:hover{
+    color:#2563eb;
+}
+
+.premium-nav{
+    background:white;
+    box-shadow:0 10px 30px rgba(0,0,0,.05);
+    padding:15px;
+}
+
+.search-dropdown{
+    position:absolute;
+    width:100%;
+    z-index:1000;
+    background:white;
+    border-radius:15px;
+    box-shadow:0 10px 30px rgba(0,0,0,.1);
+    margin-top:5px;
+    max-height:250px;
+    overflow:auto;
+}
+
+.search-item{
+    padding:12px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.search-item:hover{
+    background:#f8fafc;
+}
+
+.total-card{
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    color:white;
+    border-radius:20px;
+    padding:25px;
+}
+
+.invoice-summary-row{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:8px;
+}
+
+.modal-content{
+    border:none !important;
+    border-radius:20px !important;
+}
+
+.btn-premium{
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    border:none;
+    color:white;
+    border-radius:12px;
+    padding:10px 20px;
+}
+
+.btn-premium:hover{
+    color:white;
+}
+
+.form-control{
+    border-radius:12px !important;
+}
