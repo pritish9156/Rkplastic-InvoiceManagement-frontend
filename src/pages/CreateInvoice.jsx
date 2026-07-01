@@ -242,7 +242,7 @@ function CreateInvoice() {
 
                 window.open(
 
-                    `http://localhost:8080/Rkplastic-InvoiceManagement/api/bills/${billId}/pdf`
+                    `http://rkplastic-backend.onrender.com/api/bills/${billId}/pdf`
 
                 );
 

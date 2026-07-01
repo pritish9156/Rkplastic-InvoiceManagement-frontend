@@ -103,7 +103,7 @@ function InvoiceList() {
 
             window.open(
 
-                `http://localhost:8080/Rkplastic-InvoiceManagement/api/bills/${id}/pdf`
+                `http://rkplastic-backend.onrender.com/api/bills/${id}/pdf`
 
             );
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API =
-"http://localhost:8080/Rkplastic-InvoiceManagement/api/customers";
+"http://rkplastic-backend.onrender.com/api/customers";
 
 export const getAllCustomers =
 () => axios.get(`${API}/all`);

@@ -64,7 +64,7 @@ function InvoiceView() {
 
             window.open(
 
-                `http://localhost:8080/Rkplastic-InvoiceManagement/api/bills/${invoice.id}/pdf`
+                `http://rkplastic-backend.onrender.com/api/bills/${invoice.id}/pdf`
 
             );
 
