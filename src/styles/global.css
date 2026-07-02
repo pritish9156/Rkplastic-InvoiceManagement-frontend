@@ -1679,7 +1679,7 @@ textarea.premium-input{
 
     .table-responsive{
 
-        display:none;
+        overflow-x:auto;
 
     }
 
