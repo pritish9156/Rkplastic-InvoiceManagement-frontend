@@ -58,41 +58,57 @@ function ItemTable({
 
     };
 
+    const calculateAmount = (item) =>
+
+        (
+
+            Number(item.qty || 0) *
+
+            Number(item.rate || 0)
+
+        ).toFixed(2);
+
     return (
 
-        <div className="premium-card">
+    <div className="premium-card">
 
-            <div className="table-header">
+        <div className="table-header">
 
-                <div>
+            <div>
 
-                    <h4>
+                <h4>
 
-                        Invoice Items
+                    Invoice Items
 
-                    </h4>
+                </h4>
 
-                    <small>
+                <small>
 
-                        Add products/services for this invoice.
+                    Add products or services for this invoice
 
-                    </small>
-
-                </div>
-
-                <button
-
-                    className="btn btn-premium"
-
-                    onClick={addRow}
-
-                >
-
-                    + Add Item
-
-                </button>
+                </small>
 
             </div>
+
+            <button
+
+                className="btn btn-premium"
+
+                onClick={addRow}
+
+            >
+
+                + Add Item
+
+            </button>
+
+        </div>
+
+        {/* ============================
+                DESKTOP TABLE
+        ============================= */}
+
+        <div className="desktop-items">
 
             <div className="table-responsive">
 
@@ -100,209 +116,200 @@ function ItemTable({
 
                     <thead>
 
-                    <tr>
+                        <tr>
 
-                        <th>Description</th>
+                            <th>Description</th>
 
-                        <th>HSN / SAC</th>
+                            <th>HSN / SAC</th>
 
-                        <th width="120">
+                            <th width="100">
 
-                            Qty
+                                Qty
 
-                        </th>
+                            </th>
 
-                        <th width="140">
+                            <th width="130">
 
-                            Rate
+                                Rate
 
-                        </th>
+                            </th>
 
-                        <th width="160">
+                            <th width="150">
 
-                            Amount
+                                Amount
 
-                        </th>
+                            </th>
 
-                        <th width="90">
+                            <th width="80">
 
-                            Action
+                                Action
 
-                        </th>
+                            </th>
 
-                    </tr>
+                        </tr>
 
                     </thead>
 
                     <tbody>
 
-                    {
+                        {
 
-                        items.map((item, index) => {
+                            items.map((item,index)=>{
 
-                            const amount =
+                                const amount =
+                                    calculateAmount(item);
 
-                                Number(item.qty || 0) *
+                                return(
 
-                                Number(item.rate || 0);
+                                    <tr key={index}>
 
-                            return (
+                                        <td>
 
-                                <tr key={index}>
+                                            <input
 
-                                    <td>
+                                                className="form-control premium-input"
 
-                                        <input
+                                                placeholder="Description"
 
-                                            className="form-control premium-input"
+                                                value={item.description}
 
-                                            placeholder="Product Description"
+                                                onChange={(e)=>
 
-                                            value={item.description}
+                                                    updateItem(
 
-                                            onChange={(e) =>
+                                                        index,
 
-                                                updateItem(
+                                                        "description",
 
-                                                    index,
+                                                        e.target.value
 
-                                                    "description",
+                                                    )
 
-                                                    e.target.value
+                                                }
 
-                                                )
+                                            />
 
-                                            }
+                                        </td>
 
-                                        />
+                                        <td>
 
-                                    </td>
+                                            <input
 
-                                    <td>
+                                                className="form-control premium-input"
 
-                                        <input
+                                                placeholder="HSN / SAC"
 
-                                            className="form-control premium-input"
+                                                value={item.hsnSac}
 
-                                            placeholder="HSN/SAC"
+                                                onChange={(e)=>
 
-                                            value={item.hsnSac}
+                                                    updateItem(
 
-                                            onChange={(e) =>
+                                                        index,
 
-                                                updateItem(
+                                                        "hsnSac",
 
-                                                    index,
+                                                        e.target.value
 
-                                                    "hsnSac",
+                                                    )
 
-                                                    e.target.value
+                                                }
 
-                                                )
+                                            />
 
-                                            }
+                                        </td>
 
-                                        />
+                                        <td>
 
-                                    </td>
+                                            <input
 
-                                    <td>
+                                                type="number"
 
-                                        <input
+                                                className="form-control premium-input"
 
-                                            type="number"
+                                                value={item.qty}
 
-                                            min="1"
+                                                onChange={(e)=>
 
-                                            className="form-control premium-input"
+                                                    updateItem(
 
-                                            value={item.qty}
+                                                        index,
 
-                                            onChange={(e) =>
+                                                        "qty",
 
-                                                updateItem(
+                                                        e.target.value
 
-                                                    index,
+                                                    )
 
-                                                    "qty",
+                                                }
 
-                                                    e.target.value
+                                            />
 
-                                                )
+                                        </td>
 
-                                            }
+                                        <td>
 
-                                        />
+                                            <input
 
-                                    </td>
+                                                type="number"
 
-                                    <td>
+                                                className="form-control premium-input"
 
-                                        <input
+                                                value={item.rate}
 
-                                            type="number"
+                                                onChange={(e)=>
 
-                                            min="0"
+                                                    updateItem(
 
-                                            className="form-control premium-input"
+                                                        index,
 
-                                            value={item.rate}
+                                                        "rate",
 
-                                            onChange={(e) =>
+                                                        e.target.value
 
-                                                updateItem(
+                                                    )
 
-                                                    index,
+                                                }
 
-                                                    "rate",
+                                            />
 
-                                                    e.target.value
+                                        </td>
 
-                                                )
+                                        <td>
 
-                                            }
+                                            <div className="amount-box">
 
-                                        />
+                                                ₹ {amount}
 
-                                    </td>
+                                            </div>
 
-                                    <td>
+                                        </td>
 
-                                        <div className="amount-box">
+                                        <td>
 
-                                            ₹ {amount.toFixed(2)}
+                                            <button
 
-                                        </div>
+                                                className="btn btn-outline-danger btn-sm"
 
-                                    </td>
+                                                disabled={items.length===1}
 
-                                    <td>
+                                                onClick={()=>removeRow(index)}
 
-                                        <button
+                                            >
 
-                                            className="btn btn-outline-danger btn-sm"
+                                                ✕
 
-                                            onClick={() =>
+                                            </button>
 
-                                                removeRow(index)
+                                        </td>
 
-                                            }
+                                    </tr>
 
-                                        >
+                                );
 
-                                            ✕
+                            })
 
-                                        </button>
-
-                                    </td>
-
-                                </tr>
-
-                            );
-
-                        })
-
-                    }
+                        }
 
                     </tbody>
 
@@ -312,7 +319,234 @@ function ItemTable({
 
         </div>
 
-    );
+        {/* ============================
+                MOBILE VIEW
+        ============================= */}
+
+        <div className="mobile-items">
+
+            {
+
+    items.map((item,index)=>{
+
+        const amount =
+            calculateAmount(item);
+
+        return(
+
+            <div
+
+                key={index}
+
+                className="item-mobile-card"
+
+            >
+
+                <div className="d-flex justify-content-between align-items-center mb-3">
+
+                    <h5 className="mb-0">
+
+                        Item {index + 1}
+
+                    </h5>
+
+                    {
+
+                        items.length > 1 &&
+
+                        <button
+
+                            className="btn btn-outline-danger btn-sm"
+
+                            onClick={()=>
+
+                                removeRow(index)
+
+                            }
+
+                        >
+
+                            Remove
+
+                        </button>
+
+                    }
+
+                </div>
+
+                <div className="mb-3">
+
+                    <label className="form-label">
+
+                        Description
+
+                    </label>
+
+                    <input
+
+                        className="form-control premium-input"
+
+                        placeholder="Product Description"
+
+                        value={item.description}
+
+                        onChange={(e)=>
+
+                            updateItem(
+
+                                index,
+
+                                "description",
+
+                                e.target.value
+
+                            )
+
+                        }
+
+                    />
+
+                </div>
+
+                <div className="mb-3">
+
+                    <label className="form-label">
+
+                        HSN / SAC
+
+                    </label>
+
+                    <input
+
+                        className="form-control premium-input"
+
+                        placeholder="HSN / SAC"
+
+                        value={item.hsnSac}
+
+                        onChange={(e)=>
+
+                            updateItem(
+
+                                index,
+
+                                "hsnSac",
+
+                                e.target.value
+
+                            )
+
+                        }
+
+                    />
+
+                </div>
+
+                <div className="row">
+
+                    <div className="col-6 mb-3">
+
+                        <label className="form-label">
+
+                            Quantity
+
+                        </label>
+
+                        <input
+
+                            type="number"
+
+                            min="1"
+
+                            className="form-control premium-input"
+
+                            value={item.qty}
+
+                            onChange={(e)=>
+
+                                updateItem(
+
+                                    index,
+
+                                    "qty",
+
+                                    e.target.value
+
+                                )
+
+                            }
+
+                        />
+
+                    </div>
+
+                    <div className="col-6 mb-3">
+
+                        <label className="form-label">
+
+                            Rate
+
+                        </label>
+
+                        <input
+
+                            type="number"
+
+                            min="0"
+
+                            className="form-control premium-input"
+
+                            value={item.rate}
+
+                            onChange={(e)=>
+
+                                updateItem(
+
+                                    index,
+
+                                    "rate",
+
+                                    e.target.value
+
+                                )
+
+                            }
+
+                        />
+
+                    </div>
+
+                </div>
+
+                <div className="amount-box mt-2">
+
+                    <strong>
+
+                        Amount
+
+                    </strong>
+
+                    <span>
+
+                        ₹ {amount}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        );
+
+    })
+
+}
+
+        </div>
+
+    </div>
+
+);
 
 }
 
