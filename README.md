@@ -36,7 +36,7 @@ A modern, responsive, and production-ready Invoice Management System built for *
 - Delete invoice
 - Download PDF
 
-<img width="2048" height="985" alt="image" src="https://github.com/user-attachments/assets/5ef2a302-de87-4f38-beb4-a3ee03306fbb" />
+<img width="2048" height="913" alt="image" src="https://github.com/user-attachments/assets/b02e68c8-d646-4889-a5a2-ab4e47644382" />
 
 ---
 
@@ -49,8 +49,6 @@ Complete invoice information including
 - Invoice Items
 - Grand Total
 - Download PDF
-
-<img width="2048" height="913" alt="image" src="https://github.com/user-attachments/assets/b02e68c8-d646-4889-a5a2-ab4e47644382" />
 
 <img width="2048" height="928" alt="image" src="https://github.com/user-attachments/assets/20d479d9-5809-463c-a18c-0aa604bac309" />
 
