@@ -4,12 +4,6 @@ A modern, responsive, and production-ready Invoice Management System built for *
 
 ---
 
-## 🚀 Live Demo
-
-**Frontend:** https://rkplastic-invoice-management-fronte.vercel.app/
-
----
-
 ## 📸 Application Preview
 
 ### 🏠 Dashboard
