@@ -24,7 +24,7 @@ A modern, responsive, and production-ready Invoice Management System built for *
 - Dynamic Item Management
 - Automatic Tax Calculation
 
-<img width="100%" src="YOUR_CREATE_INVOICE_SCREENSHOT_URL"/>
+<img width="2048" height="985" alt="image" src="https://github.com/user-attachments/assets/576d6ae6-9d53-4af1-ae64-e79c6aa796ab" />
 
 ---
 
